@@ -1,0 +1,21 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+    <PropertyGroup>
+        <TargetFramework>net9.0</TargetFramework>
+        <ImplicitUsings>enable</ImplicitUsings>
+        <Nullable>enable</Nullable>
+    </PropertyGroup>
+
+    <ItemGroup>
+      <ProjectReference Include="..\Auth.Application\Auth.Application.csproj" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <PackageReference Include="MassTransit.RabbitMQ" />
+      <PackageReference Include="Microsoft.AspNetCore.Identity" />
+      <PackageReference Include="Microsoft.AspNetCore.Identity.EntityFrameworkCore" />
+      <PackageReference Include="Npgsql" />
+      <PackageReference Include="Npgsql.EntityFrameworkCore.PostgreSQL" />
+    </ItemGroup>
+
+</Project>

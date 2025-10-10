@@ -1,0 +1,26 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+    <PropertyGroup>
+        <TargetFramework>net9.0</TargetFramework>
+        <ImplicitUsings>enable</ImplicitUsings>
+        <Nullable>enable</Nullable>
+    </PropertyGroup>
+
+    <ItemGroup>
+      <ProjectReference Include="..\..\..\Common\Common.csproj" />
+      <ProjectReference Include="..\Auth.Core\Auth.Core.csproj" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <PackageReference Include="FluentValidation" />
+      <PackageReference Include="FluentValidation.DependencyInjectionExtensions" />
+      <PackageReference Include="JetBrains.Annotations" />
+      <PackageReference Include="MediatR" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <Folder Include="Users\Dtos\" />
+      <Folder Include="Users\Queries\" />
+    </ItemGroup>
+
+</Project>
