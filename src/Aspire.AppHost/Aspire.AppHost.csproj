@@ -11,20 +11,21 @@
     </PropertyGroup>
 
     <ItemGroup>
-        <PackageReference Include="Aspire.Hosting.AppHost" />
-        <PackageReference Include="Aspire.Hosting.Docker" />
-        <PackageReference Include="Aspire.Hosting.OpenAI" />
-        <PackageReference Include="Aspire.Hosting.PostgreSQL" />
-        <PackageReference Include="Aspire.Hosting.RabbitMQ" />
-        <PackageReference Include="Aspire.Hosting.Valkey" />
-        <PackageReference Include="CommunityToolkit.Aspire.Hosting.MailPit" />
-        <PackageReference Include="CommunityToolkit.Aspire.Hosting.Minio" />
+        <PackageReference Include="Aspire.Hosting.AppHost" Version="9.5.1" />
+        <PackageReference Include="Aspire.Hosting.Docker" Version="9.5.1-preview.1.25502.11" />
+        <PackageReference Include="Aspire.Hosting.OpenAI" Version="9.5.1-preview.1.25502.11" />
+        <PackageReference Include="Aspire.Hosting.PostgreSQL" Version="9.5.1" />
+        <PackageReference Include="Aspire.Hosting.RabbitMQ" Version="9.5.1" />
+        <PackageReference Include="Aspire.Hosting.Valkey" Version="9.5.1" />
+        <PackageReference Include="CommunityToolkit.Aspire.Hosting.MailPit" Version="9.8.0" />
+        <PackageReference Include="CommunityToolkit.Aspire.Hosting.Minio" Version="9.8.0" />
     </ItemGroup>
 
     <ItemGroup>
       <ProjectReference Include="..\Services\Auth\Auth.API\Auth.API.csproj" />
       <ProjectReference Include="..\Services\Cart\Cart.API\Cart.API.csproj" />
       <ProjectReference Include="..\Services\Catalog\Catalog.API\Catalog.API.csproj" />
+      <ProjectReference Include="..\Services\Gateway\Gateway.Api\Gateway.Api.csproj" />
       <ProjectReference Include="..\Services\Notifications\Notifications.API\Notifications.API.csproj" />
     </ItemGroup>
 

@@ -1,6 +1,6 @@
 var builder = DistributedApplication.CreateBuilder(args);
 
-builder.AddDockerComposeEnvironment("StoreProductionEnvironment");
+// builder.AddDockerComposeEnvironment("StoreProductionEnvironment");
 
 var mailPit = builder.AddMailPit("MailPit")
     .WithDataVolume("MailPitData");
@@ -9,6 +9,7 @@ var minio = builder.AddMinioContainer("MinIO")
     .WithDataVolume();
 
 var rabbitMq = builder.AddRabbitMQ("RabbitMQ")
+    .WithManagementPlugin()
     .WithDataVolume();
 
 var valkey = builder.AddValkey("Valkey")
@@ -25,7 +26,7 @@ var gptOss120b = openAi
 
 var postgres = builder.AddPostgres("Postgres")
     .WithDataVolume()
-    .WithPgWeb(containerName: "PgWeb");
+    .WithPgAdmin(containerName: "PgAdmin");
 var authDb = postgres.AddDatabase("AuthDB");
 var catalogDb = postgres.AddDatabase("CatalogDB");
 var cartDb = postgres.AddDatabase("CartDB");
@@ -59,5 +60,10 @@ var notificationsApi = builder.AddProject<Projects.Notifications_API>("Notificat
     .WaitFor(rabbitMq)
     .WithReference(mailPit)
     .WaitFor(mailPit);
+
+var gatewayApi = builder.AddProject<Projects.Gateway_Api>("GatewayAPI")
+    .WithHttpHealthCheck("/health")
+    .WithReference(rabbitMq)
+    .WaitFor(rabbitMq);
 
 builder.Build().Run();

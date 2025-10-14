@@ -1,5 +1,5 @@
 ﻿using System.Reflection;
-using Auth.Application.Common.Interfaces;
+using Auth.Application.Interfaces;
 using Auth.Infrastructure.Data;
 using Auth.Infrastructure.Services;
 using MassTransit;
@@ -19,13 +19,13 @@ public static class Injection
 
         services.AddMassTransit(cfg =>
         {
+            cfg.AddConsumers(Assembly.GetExecutingAssembly());
             cfg.DisableUsageTelemetry();
             cfg.UsingRabbitMq((context, configurator) =>
             {
                 configurator.Host(configuration.GetConnectionString("RabbitMQ"));
                 configurator.ConfigureEndpoints(context);
             });
-            cfg.AddConsumers(Assembly.GetExecutingAssembly());
         });
 
         services.AddDataProtection();
@@ -40,6 +40,7 @@ public static class Injection
             .AddDefaultTokenProviders()
             .AddEntityFrameworkStores<AuthContext>();
 
-        services.AddScoped<IIdentityService, IdentityService>();
+        services.AddScoped<IUserManager, UserManager>();
+        services.AddScoped<IRoleManager, RoleManager>();
     }
 }
