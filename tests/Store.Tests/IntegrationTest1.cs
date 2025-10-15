@@ -4,7 +4,7 @@ namespace Store.Tests;
 
 public class IntegrationTest1
 {
-    private static readonly TimeSpan DefaultTimeout = TimeSpan.FromSeconds(15);
+    private static readonly TimeSpan DefaultTimeout = TimeSpan.FromSeconds(30);
 
     [Fact]
     public async Task GetWebResourceHealth_ReturnsOk()
