@@ -26,11 +26,7 @@ jobs:
       run: dotnet build --no-restore
 
     - name: Trust the .NET dev certificate
-      run: |
-        dotnet dev-certs https
-        sudo mkdir -p /usr/local/share/ca-certificates/aspnet
-        sudo dotnet dev-certs https --export-path /usr/local/share/ca-certificates/aspnet/https.crt --format PEM
-        sudo update-ca-certificates
+      run: dotnet dev-certs https --trust
     
     - name: Test
       run: dotnet test --no-build --verbosity normal
