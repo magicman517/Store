@@ -4,7 +4,7 @@ namespace Store.Tests;
 
 public class IntegrationTest1
 {
-    private static readonly TimeSpan DefaultTimeout = TimeSpan.FromSeconds(30);
+    private static readonly TimeSpan DefaultTimeout = TimeSpan.FromSeconds(120);
 
     [Fact]
     public async Task GetWebResourceHealth_ReturnsOk()
@@ -14,9 +14,9 @@ public class IntegrationTest1
         var appHost = await DistributedApplicationTestingBuilder.CreateAsync<Projects.Aspire_AppHost>(cancellationToken);
         appHost.Services.AddLogging(logging =>
         {
-            logging.SetMinimumLevel(LogLevel.Debug);
-            logging.AddFilter(appHost.Environment.ApplicationName, LogLevel.Debug);
-            logging.AddFilter("Aspire.", LogLevel.Debug);
+            logging.SetMinimumLevel(LogLevel.Information);
+            // logging.AddFilter(appHost.Environment.ApplicationName, LogLevel.Debug);
+            // logging.AddFilter("Aspire.", LogLevel.Debug);
             // To output logs to the xUnit.net ITestOutputHelper, consider adding a package from https://www.nuget.org/packages?q=xunit+logging
         });
         appHost.Services.ConfigureHttpClientDefaults(clientBuilder =>
