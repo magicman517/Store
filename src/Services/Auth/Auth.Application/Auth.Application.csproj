@@ -8,8 +8,36 @@
 
     <ItemGroup>
       <ProjectReference Include="..\..\..\Common\Common.csproj" />
-      <ProjectReference Include="..\..\..\Messaging\Messaging.csproj" />
       <ProjectReference Include="..\Auth.Core\Auth.Core.csproj" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <PackageReference Include="FastEndpoints" Version="7.0.1" />
+      <PackageReference Include="FastEndpoints.Security" Version="7.0.1" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <EmbeddedResource Update="Resources\Dtos\User\Requests\CreateUserRequest.en.resx">
+        <Generator>ResXFileCodeGenerator</Generator>
+        <LastGenOutput>CreateUserRequest.en.Designer.cs</LastGenOutput>
+      </EmbeddedResource>
+      <EmbeddedResource Update="Resources\Dtos\User\Requests\CreateUserRequest.uk.resx">
+        <Generator>ResXFileCodeGenerator</Generator>
+        <LastGenOutput>CreateUserRequest.uk.Designer.cs</LastGenOutput>
+      </EmbeddedResource>
+    </ItemGroup>
+
+    <ItemGroup>
+      <Compile Update="Resources\Dtos\User\Requests\CreateUserRequest.en.Designer.cs">
+        <DesignTime>True</DesignTime>
+        <AutoGen>True</AutoGen>
+        <DependentUpon>CreateUserRequest.en.resx</DependentUpon>
+      </Compile>
+      <Compile Update="Resources\Dtos\User\Requests\CreateUserRequest.uk.Designer.cs">
+        <DesignTime>True</DesignTime>
+        <AutoGen>True</AutoGen>
+        <DependentUpon>CreateUserRequest.uk.resx</DependentUpon>
+      </Compile>
     </ItemGroup>
 
 </Project>

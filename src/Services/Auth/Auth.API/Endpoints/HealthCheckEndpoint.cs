@@ -1,6 +1,6 @@
 ﻿using FastEndpoints;
 
-namespace Gateway.API.Endpoints.Other;
+namespace Auth.API.Endpoints;
 
 public class HealthCheckEndpoint : EndpointWithoutRequest
 {

@@ -1,15 +1,13 @@
 ﻿using FastEndpoints;
 
-namespace Gateway.API.Endpoints.Users;
+namespace Auth.API.Endpoints.Users;
 
 public class GetUserByIdEndpoint : Endpoint<Guid>
 {
     public override void Configure()
     {
         Get("/users/{id:guid}");
-        AllowAnonymous();
 
-        Version(1);
         Description(b => b.Produces(200));
     }
 
