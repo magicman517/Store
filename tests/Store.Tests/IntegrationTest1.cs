@@ -28,8 +28,8 @@ public class IntegrationTest1
         await app.StartAsync(cancellationToken).WaitAsync(DefaultTimeout, cancellationToken);
 
         // Act
-        using var httpClient = app.CreateHttpClient("GatewayAPI");
-        await app.ResourceNotifications.WaitForResourceHealthyAsync("GatewayAPI", cancellationToken).WaitAsync(DefaultTimeout, cancellationToken);
+        using var httpClient = app.CreateHttpClient("AuthAPI");
+        await app.ResourceNotifications.WaitForResourceHealthyAsync("AuthAPI", cancellationToken).WaitAsync(DefaultTimeout, cancellationToken);
         using var response = await httpClient.GetAsync("/health", cancellationToken);
 
         // Assert
