@@ -1,7 +1,9 @@
-﻿using Auth.Application.Dtos.User.Requests;
+﻿using System.Data;
+using Auth.Application.Dtos.User.Requests;
 using Auth.Application.Interfaces;
 using Common;
 using Auth.Infrastructure.Data;
+using Microsoft.EntityFrameworkCore;
 
 namespace Auth.Infrastructure.Services;
 
@@ -9,7 +11,7 @@ public class UserService(IUserManager userManager, IRoleManager roleManager, Aut
 {
     public async Task<Result<Guid>> CreateUserAsync(CreateUserRequest dto, CancellationToken ct = default)
     {
-        await using var transaction = await db.Database.BeginTransactionAsync(ct);
+        await using var transaction = await db.Database.BeginTransactionAsync(IsolationLevel.Serializable, ct);
         try
         {
             var isFirstUser = !await userManager.HasUsersAsync(ct);
@@ -32,15 +34,11 @@ public class UserService(IUserManager userManager, IRoleManager roleManager, Aut
 
             var userId = createUserResult.Value;
 
-            var roleExists = await roleManager.RoleExistsAsync(roleToAssign, ct);
-            if (!roleExists)
+            var createRoleResult = await roleManager.CreateRoleAsync(roleToAssign, ct);
+            if (!createRoleResult.IsSuccess)
             {
-                var createRoleResult = await roleManager.CreateRoleAsync(roleToAssign, ct);
-                if (!createRoleResult.IsSuccess)
-                {
-                    await transaction.RollbackAsync(ct);
-                    return Result<Guid>.Fail(createRoleResult.Error, createRoleResult.StatusCode);
-                }
+                await transaction.RollbackAsync(ct);
+                return Result<Guid>.Fail(createRoleResult.Error, createRoleResult.StatusCode);
             }
 
             var addToRoleResult = await userManager.AddToRoleAsync(userId, roleToAssign, ct);
