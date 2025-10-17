@@ -24,6 +24,10 @@ var gptOss120b = openAi
     .AddModel("GPT-OSS-120b", "openai/gpt-oss-120b")
     .WithHealthCheck();
 
+var mongoDb = builder.AddMongoDB("MongoDB")
+    .WithDbGate(containerName: "DbGate")
+    .WithDataVolume();
+
 var postgres = builder.AddPostgres("Postgres")
     .WithDataVolume()
     .WithPgAdmin(containerName: "PgAdmin");
