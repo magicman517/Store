@@ -25,7 +25,7 @@
       <ProjectReference Include="..\Services\Auth\Auth.API\Auth.API.csproj" />
       <ProjectReference Include="..\Services\Cart\Cart.API\Cart.API.csproj" />
       <ProjectReference Include="..\Services\Catalog\Catalog.API\Catalog.API.csproj" />
-      <ProjectReference Include="..\Services\Gateway\Gateway.Api\Gateway.Api.csproj" />
+      <ProjectReference Include="..\Services\Gateway\Gateway.API\Gateway.API.csproj" />
       <ProjectReference Include="..\Services\Notifications\Notifications.API\Notifications.API.csproj" />
     </ItemGroup>
 

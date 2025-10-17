@@ -1,6 +1,6 @@
 ﻿using FastEndpoints;
 
-namespace Gateway.Api.Endpoints.Users;
+namespace Gateway.API.Endpoints.Users;
 
 public class GetUserByIdEndpoint : Endpoint<Guid>
 {
@@ -13,8 +13,8 @@ public class GetUserByIdEndpoint : Endpoint<Guid>
         Description(b => b.Produces(200));
     }
 
-    public override async Task HandleAsync(Guid req, CancellationToken ct)
+    public override Task HandleAsync(Guid req, CancellationToken ct)
     {
-
+        return Task.CompletedTask;
     }
 }
