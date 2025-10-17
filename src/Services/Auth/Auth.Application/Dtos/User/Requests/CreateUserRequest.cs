@@ -18,7 +18,7 @@ public record CreateUserRequest
 
 public class CreateUserRequestValidator : Validator<CreateUserRequest>
 {
-    public CreateUserRequestValidator(IStringLocalizer<CreateUserRequestValidator> localizer)
+    public CreateUserRequestValidator(IStringLocalizer<CreateUserRequest> localizer)
     {
         RuleFor(x => x.Email)
             .NotEmpty().WithMessage(_ => localizer["Error.Email.NotEmpty"])

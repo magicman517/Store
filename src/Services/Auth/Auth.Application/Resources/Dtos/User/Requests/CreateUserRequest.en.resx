@@ -31,7 +31,7 @@
         <value>Password must contain at least 8 characters</value>
     </data>
     <data name="Error.Password.Digit" xml:space="preserve">
-        <value>Email cannot be empty</value>
+        <value>Password must contain at least one digit</value>
     </data>
     <data name="Error.Phone.InvalidFormat" xml:space="preserve">
         <value>Incorrect phone format</value>

@@ -96,7 +96,7 @@ namespace Auth.Application.Resources.Dtos.User.Requests {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Email cannot be empty.
+        ///   Looks up a localized string similar to Password must contain at least one digit.
         /// </summary>
         internal static string Error_Password_Digit {
             get {
