@@ -61,7 +61,7 @@ var notificationsApi = builder.AddProject<Projects.Notifications_API>("Notificat
     .WithReference(mailPit)
     .WaitFor(mailPit);
 
-var gatewayApi = builder.AddProject<Projects.Gateway_Api>("GatewayAPI")
+var gatewayApi = builder.AddProject<Projects.Gateway_API>("GatewayAPI")
     .WithHttpHealthCheck("/health")
     .WithReference(rabbitMq)
     .WaitFor(rabbitMq);

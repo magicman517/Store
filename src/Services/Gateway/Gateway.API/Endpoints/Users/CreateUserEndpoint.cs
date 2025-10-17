@@ -5,7 +5,7 @@ using MassTransit;
 using Messaging.Contracts;
 using Messaging.Contracts.Users.CreateUser;
 
-namespace Gateway.Api.Endpoints.Users;
+namespace Gateway.API.Endpoints.Users;
 
 public class CreateUserEndpoint(IRequestClient<CreateUserContractRequest> requestClient) : Endpoint<CreateUserRequest>
 {
