@@ -1,14 +1,17 @@
 ﻿using System.Security.Cryptography;
 using System.Text;
-using Auth.Application.Dtos.User;
+using Auth.Application.Dtos.Auth.Responses;
+using Auth.Application.Dtos.User.Responses;
 using Auth.Application.Interfaces;
 using Auth.Infrastructure.Data;
 using Common;
 using FastEndpoints.Security;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Localization;
 
 namespace Auth.Infrastructure.Services;
 
-public class TokenService(AuthContext context) : ITokenService
+public class TokenService(IStringLocalizer<TokenService> localizer, AuthContext context) : ITokenService
 {
     public string GenerateAccessToken(UserDto userDto)
     {
@@ -29,6 +32,30 @@ public class TokenService(AuthContext context) : ITokenService
         return Convert.ToBase64String(randomNumber);
     }
 
+    public async Task<Result<RefreshTokenDto>> GetRefreshTokenAsync(string refreshToken, CancellationToken ct = default)
+    {
+        var hashed = HashToken(refreshToken);
+
+        var tokenEntity = await context.RefreshTokens
+            .AsNoTracking()
+            .FirstOrDefaultAsync(t => t.Token == hashed, ct);
+
+        if (tokenEntity == null)
+        {
+            return Result<RefreshTokenDto>.Fail(localizer["Error.RefreshToken.NotFound"], 404);
+        }
+
+        var refreshTokenDto = new RefreshTokenDto
+        {
+            Token = tokenEntity.Token,
+            UserId = tokenEntity.UserId,
+            ExpiresAt = tokenEntity.ExpiresAt
+        };
+
+        return Result<RefreshTokenDto>.Ok(refreshTokenDto);
+    }
+
+
     public async Task PersistRefreshTokenAsync(Guid userId, string refreshToken, DateTimeOffset expiresAt,
         CancellationToken ct = default)
     {
@@ -38,7 +65,7 @@ public class TokenService(AuthContext context) : ITokenService
         {
             UserId = userId,
             Token = hashed,
-            ExpiresAt = expiresAt,
+                        ExpiresAt = expiresAt,
             CreatedAt = DateTimeOffset.UtcNow
         };
 
@@ -46,14 +73,34 @@ public class TokenService(AuthContext context) : ITokenService
         await context.SaveChangesAsync(ct);
     }
 
-    public Task<Result<Guid>> ValidateRefreshTokenAsync(string refreshToken, CancellationToken ct = default)
+    public async Task<Result<bool>> ValidateRefreshTokenAsync(string refreshToken, CancellationToken ct = default)
     {
-        throw new NotImplementedException();
+        var hashed = HashToken(refreshToken);
+
+        var tokenEntity = await context.RefreshTokens
+            .AsNoTracking()
+            .FirstOrDefaultAsync(t => t.Token == hashed, ct);
+
+        if (tokenEntity == null || tokenEntity.ExpiresAt < DateTimeOffset.UtcNow)
+        {
+            return Result<bool>.Fail(localizer["Error.RefreshToken.Invalid"], 400);
+        }
+
+        return Result<bool>.Ok(true);
     }
 
-    public Task RevokeRefreshTokenAsync(string refreshToken, CancellationToken ct = default)
+    public async Task RevokeRefreshTokenAsync(string refreshToken, CancellationToken ct = default)
     {
-        throw new NotImplementedException();
+        var hashed = HashToken(refreshToken);
+
+        var tokenEntity = await context.RefreshTokens
+            .FirstOrDefaultAsync(t => t.Token == hashed, ct);
+
+        if (tokenEntity != null)
+        {
+            context.RefreshTokens.Remove(tokenEntity);
+            await context.SaveChangesAsync(ct);
+        }
     }
 
     private static string HashToken(string token)

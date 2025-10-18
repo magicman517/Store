@@ -1,6 +1,7 @@
 ﻿using System.Data;
 using Auth.Application.Dtos.User;
 using Auth.Application.Dtos.User.Requests;
+using Auth.Application.Dtos.User.Responses;
 using Auth.Application.Interfaces;
 using Common;
 using Auth.Infrastructure.Data;

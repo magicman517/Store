@@ -7,9 +7,11 @@ using Microsoft.Extensions.Localization;
 
 namespace Auth.Infrastructure.Services;
 
-public class UserManager(UserManager<ApplicationUser> userManager, IStringLocalizer<UserManager> localizer) : IUserManager
+public class UserManager(UserManager<ApplicationUser> userManager, IStringLocalizer<UserManager> localizer)
+    : IUserManager
 {
-    public async Task<Result<Guid>> CreateUserAsync(string email, string password, string? firstName, string? lastName, string? middleName,
+    public async Task<Result<Guid>> CreateUserAsync(string email, string password, string? firstName, string? lastName,
+        string? middleName,
         string? phone, CancellationToken ct = default)
     {
         var exists = await UserExistsAsync(email, ct);
@@ -39,7 +41,7 @@ public class UserManager(UserManager<ApplicationUser> userManager, IStringLocali
     {
         var user = await userManager.FindByIdAsync(userId.ToString());
         if (user is null)
-                        return Result<IEnumerable<string>>.Fail(localizer["Error.User.NotFound"], 404);
+            return Result<IEnumerable<string>>.Fail(localizer["Error.User.NotFound"], 404);
 
         var roles = await userManager.GetRolesAsync(user);
         return Result<IEnumerable<string>>.Ok(roles);

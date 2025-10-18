@@ -1,5 +1,6 @@
 ﻿using Auth.Application.Dtos.User;
 using Auth.Application.Dtos.User.Requests;
+using Auth.Application.Dtos.User.Responses;
 using Common;
 
 namespace Auth.Application.Interfaces;
