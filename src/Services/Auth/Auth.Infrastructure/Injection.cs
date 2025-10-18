@@ -32,5 +32,7 @@ public static class Injection
         services.AddScoped<IUserManager, UserManager>();
         services.AddScoped<IRoleManager, RoleManager>();
         services.AddScoped<IUserService, UserService>();
+        services.AddScoped<ITokenService, TokenService>();
+        services.AddScoped<IAuthService, AuthService>();
     }
 }

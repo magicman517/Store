@@ -20,15 +20,23 @@ builder.Services.Configure<RequestLocalizationOptions>(options =>
     options.AddSupportedUICultures(supportedCultures);
 });
 
-builder.Services.AddAuthenticationJwtBearer(s => s.SigningKey = "development-signing-key-change-me-in-production");
+builder.Services.AddAuthenticationJwtBearer(s =>
+{
+    s.SigningKey = builder.Configuration["Jwt:SigningKey"] ?? "development-signing-key-change-me-in-production";
+});
 builder.Services.AddAuthorization();
+
+builder.Services.Configure<JwtCreationOptions>(options =>
+{
+    options.SigningKey = builder.Configuration["Jwt:SigningKey"] ?? "development-signing-key-change-me-in-production";
+    options.SigningAlgorithm = "HS256";
+});
 
 builder.Services.AddApplication();
 builder.Services.AddInfrastructure(builder.Configuration);
 
 builder.Services.AddFastEndpoints();
 builder.Services.AddOpenApi();
-
 
 var app = builder.Build();
 

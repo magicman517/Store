@@ -18,14 +18,11 @@ public class CreateUserEndpoint(IUserService userService) : Endpoint<CreateUserR
     {
         var result = await userService.CreateUserAsync(req, ct);
 
-        if (result.IsSuccess)
+        if (result.IsFailure)
         {
-            await Send.CreatedAtAsync<GetUserByIdEndpoint>(new { Id = result.Value }, cancellation: ct);
+            ThrowError(result.Error, result.StatusCode);
         }
-        else
-        {
-            AddError(result.Error);
-            await Send.ErrorsAsync(result.StatusCode, ct);
-        }
+
+        await Send.CreatedAtAsync<GetUserByIdEndpoint>(new { Id = result.Value }, cancellation: ct);
     }
 }
