@@ -27,7 +27,10 @@ public class CreateUserRequestValidator : Validator<CreateUserRequest>
         RuleFor(x => x.Password)
             .NotEmpty().WithMessage(_ => localizer["Error.Password.NotEmpty"])
             .MinimumLength(8).WithMessage(_ => localizer["Error.Password.MinLength"])
-            .Matches("[0-9]+").WithMessage(_ => localizer["Error.Password.Digit"]);
+            .Matches("[A-Z]+").WithMessage(_ => localizer["Error.Password.Uppercase"])
+            .Matches("[a-z]+").WithMessage(_ => localizer["Error.Password.Lowercase"])
+            .Matches("[0-9]+").WithMessage(_ => localizer["Error.Password.Digit"])
+            .Matches("[^a-zA-Z0-9]+").WithMessage(_ => localizer["Error.Password.SpecialChar"]);
 
         RuleFor(x => x.Phone)
             .Matches(@"^\+380\d{9}$")

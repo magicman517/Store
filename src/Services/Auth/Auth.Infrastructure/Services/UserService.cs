@@ -7,6 +7,7 @@ using Common;
 using Auth.Infrastructure.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Localization;
+using Microsoft.Extensions.Logging;
 
 namespace Auth.Infrastructure.Services;
 
@@ -14,10 +15,28 @@ public class UserService(
     IUserManager userManager,
     IRoleManager roleManager,
     IStringLocalizer<UserService> localizer,
+    ILogger<UserService> logger,
     AuthContext db) : IUserService
 {
+    private static string MaskEmail(string email)
+    {
+        var parts = email.Split('@');
+        if (parts.Length != 2)
+            return "***";
+        
+        var local = parts[0];
+        var domain = parts[1];
+        
+        if (local.Length <= 2)
+            return $"{local[0]}***@{domain}";
+        
+        return $"{local[0]}***{local[^1]}@{domain}";
+    }
+
     public async Task<Result<Guid>> CreateUserAsync(CreateUserRequest dto, CancellationToken ct = default)
     {
+        logger.LogInformation("User registration attempt for email: {Email}", MaskEmail(dto.Email));
+        
         await using var transaction = await db.Database.BeginTransactionAsync(IsolationLevel.Serializable, ct);
         try
         {
@@ -35,6 +54,7 @@ public class UserService(
 
             if (!createUserResult.IsSuccess)
             {
+                logger.LogWarning("User registration failed for email: {Email} - {Error}", MaskEmail(dto.Email), createUserResult.Error);
                 await transaction.RollbackAsync(ct);
                 return Result<Guid>.Fail(createUserResult.Error, createUserResult.StatusCode);
             }
@@ -44,6 +64,7 @@ public class UserService(
             var createRoleResult = await roleManager.CreateRoleAsync(roleToAssign, ct);
             if (!createRoleResult.IsSuccess)
             {
+                logger.LogWarning("User registration failed for email: {Email} - Role creation failed: {Error}", MaskEmail(dto.Email), createRoleResult.Error);
                 await transaction.RollbackAsync(ct);
                 return Result<Guid>.Fail(createRoleResult.Error, createRoleResult.StatusCode);
             }
@@ -51,11 +72,13 @@ public class UserService(
             var addToRoleResult = await userManager.AddToRoleAsync(userId, roleToAssign, ct);
             if (!addToRoleResult.IsSuccess)
             {
+                logger.LogWarning("User registration failed for email: {Email} - Role assignment failed: {Error}", MaskEmail(dto.Email), addToRoleResult.Error);
                 await transaction.RollbackAsync(ct);
                 return Result<Guid>.Fail(addToRoleResult.Error, addToRoleResult.StatusCode);
             }
 
             await transaction.CommitAsync(ct);
+            logger.LogInformation("User registration successful for email: {Email} with role: {Role}", MaskEmail(dto.Email), roleToAssign);
             return Result<Guid>.Ok(userId);
         }
         catch (OperationCanceledException)
@@ -63,8 +86,9 @@ public class UserService(
             await transaction.RollbackAsync(CancellationToken.None);
             throw;
         }
-        catch (Exception)
+        catch (Exception ex)
         {
+            logger.LogError(ex, "User registration failed for email: {Email} - Unexpected error", MaskEmail(dto.Email));
             try
             {
                 await transaction.RollbackAsync(ct);

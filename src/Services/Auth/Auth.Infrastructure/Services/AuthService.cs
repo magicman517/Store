@@ -2,16 +2,39 @@
 using Auth.Application.Interfaces;
 using Common;
 using Microsoft.Extensions.Localization;
+using Microsoft.Extensions.Logging;
 
 namespace Auth.Infrastructure.Services;
 
-public class AuthService(IUserService userService, ITokenService tokenService, IStringLocalizer<AuthService> localizer) : IAuthService
+public class AuthService(
+    IUserService userService,
+    ITokenService tokenService,
+    IStringLocalizer<AuthService> localizer,
+    ILogger<AuthService> logger) : IAuthService
 {
+    private static string MaskEmail(string email)
+    {
+        var parts = email.Split('@');
+        if (parts.Length != 2)
+            return "***";
+        
+        var local = parts[0];
+        var domain = parts[1];
+        
+        if (local.Length <= 2)
+            return $"{local[0]}***@{domain}";
+        
+        return $"{local[0]}***{local[^1]}@{domain}";
+    }
+
     public async Task<Result<TokenResponse>> AuthorizeAsync(string email, string password, CancellationToken ct = default)
     {
+        logger.LogInformation("Login attempt for user: {Email}", MaskEmail(email));
+        
         var userResult = await userService.GetUserByEmailAsync(email, ct);
         if (userResult.IsFailure)
         {
+            logger.LogWarning("Failed login attempt for user: {Email} - User not found", MaskEmail(email));
             return Result<TokenResponse>.Fail(localizer["Error.Auth.InvalidCredentials"], 400);
         }
 
@@ -20,6 +43,7 @@ public class AuthService(IUserService userService, ITokenService tokenService, I
         var isPasswordValid = await userService.IsPasswordValidAsync(userDto, password, ct);
         if (!isPasswordValid)
         {
+            logger.LogWarning("Failed login attempt for user: {Email} - Invalid password", MaskEmail(email));
             return Result<TokenResponse>.Fail(localizer["Error.Auth.InvalidCredentials"], 400);
         }
 
@@ -28,6 +52,8 @@ public class AuthService(IUserService userService, ITokenService tokenService, I
 
         await tokenService.PersistRefreshTokenAsync(userDto.Id, refreshToken, DateTimeOffset.UtcNow.AddDays(7), ct);
 
+        logger.LogInformation("Successful login for user: {Email}", MaskEmail(email));
+        
         var tokenResponse = new TokenResponse
         {
             AccessToken = accessToken,
@@ -38,21 +64,26 @@ public class AuthService(IUserService userService, ITokenService tokenService, I
 
     public async Task<Result<TokenResponse>> RefreshAuthAsync(string refreshToken, CancellationToken ct = default)
     {
+        logger.LogInformation("Token refresh attempt");
+        
         var refreshTokenDtoResult = await tokenService.GetRefreshTokenAsync(refreshToken, ct);
         if (refreshTokenDtoResult.IsFailure)
         {
+            logger.LogWarning("Token refresh failed - Invalid refresh token");
             return Result<TokenResponse>.Fail(localizer["Error.Auth.InvalidRefreshToken"], 400);
         }
 
         var validateResult = await tokenService.ValidateRefreshTokenAsync(refreshToken, ct);
         if (validateResult.IsFailure)
         {
+            logger.LogWarning("Token refresh failed - Refresh token validation failed for user: {UserId}", refreshTokenDtoResult.Value.UserId);
             return Result<TokenResponse>.Fail(localizer["Error.Auth.InvalidRefreshToken"], 400);
         }
 
         var userResult = await userService.GetUserByIdAsync(refreshTokenDtoResult.Value.UserId, ct);
         if (userResult.IsFailure)
         {
+            logger.LogWarning("Token refresh failed - User not found: {UserId}", refreshTokenDtoResult.Value.UserId);
             return Result<TokenResponse>.Fail(localizer["Error.Auth.InvalidRefreshToken"], 404);
         }
 
@@ -64,6 +95,9 @@ public class AuthService(IUserService userService, ITokenService tokenService, I
         // Revoke the old refresh token before persisting the new one
         await tokenService.RevokeRefreshTokenAsync(refreshToken, ct);
         await tokenService.PersistRefreshTokenAsync(userDto.Id, newRefreshToken, DateTimeOffset.UtcNow.AddDays(7), ct);
+        
+        logger.LogInformation("Token refresh successful for user: {UserId}", userDto.Id);
+        
         var tokenResponse = new TokenResponse
         {
             AccessToken = newAccessToken,
