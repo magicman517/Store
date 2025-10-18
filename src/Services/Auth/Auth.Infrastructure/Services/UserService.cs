@@ -1,4 +1,4 @@
-﻿using System.Data;
+using System.Data;
 using Auth.Application.Dtos.User;
 using Auth.Application.Dtos.User.Requests;
 using Auth.Application.Interfaces;
@@ -15,6 +15,13 @@ public class UserService(
     IStringLocalizer<UserService> localizer,
     AuthContext db) : IUserService
 {
+    /// <summary>
+    /// Creates a new user and assigns a role ("Admin" for the first user, otherwise "User") within a serializable database transaction.
+    /// </summary>
+    /// <param name="dto">The request containing the new user's email, password, name parts, and phone number.</param>
+    /// <param name="ct">A cancellation token to cancel the operation.</param>
+    /// <returns>A Result containing the created user's Id on success; a failed Result with an error message and HTTP status code on failure.</returns>
+    /// <exception cref="OperationCanceledException">Propagated when the operation is canceled via the provided cancellation token.</exception>
     public async Task<Result<Guid>> CreateUserAsync(CreateUserRequest dto, CancellationToken ct = default)
     {
         await using var transaction = await db.Database.BeginTransactionAsync(IsolationLevel.Serializable, ct);
@@ -77,6 +84,11 @@ public class UserService(
         }
     }
 
+    /// <summary>
+    /// Retrieves the user with the specified email and their assigned roles.
+    /// </summary>
+    /// <param name="email">The email address of the user to retrieve.</param>
+    /// <returns>A Result containing the user's UserDto with populated Roles if found; otherwise a failed Result with an error message and status code (404 if not found or other codes returned from role retrieval).</returns>
     public async Task<Result<UserDto>> GetUserByEmailAsync(string email, CancellationToken ct = default)
     {
         var user = await db.Users
@@ -106,6 +118,12 @@ public class UserService(
         return Result<UserDto>.Ok(userDto);
     }
 
+    /// <summary>
+    /// Retrieves the user with the specified ID and returns a DTO that includes the user's assigned roles.
+    /// </summary>
+    /// <param name="userId">The unique identifier of the user to retrieve.</param>
+    /// <param name="ct">A cancellation token for the operation.</param>
+    /// <returns>A Result&lt;UserDto&gt; containing the user DTO when found; `Fail` with status 404 and a localized message if the user is not found, or `Fail` with the role retrieval error and its status code if fetching roles fails.</returns>
     public async Task<Result<UserDto>> GetUserByIdAsync(Guid userId, CancellationToken ct = default)
     {
         var user = await db.Users
@@ -135,6 +153,13 @@ public class UserService(
         return Result<UserDto>.Ok(userDto);
     }
 
+    /// <summary>
+    /// Verifies whether the provided password matches the specified user's credentials.
+    /// </summary>
+    /// <param name="userDto">The user whose password will be validated.</param>
+    /// <param name="password">The plaintext password to validate.</param>
+    /// <param name="ct">Cancellation token.</param>
+    /// <returns>`true` if the password is valid for the user, `false` otherwise.</returns>
     public async Task<bool> IsPasswordValidAsync(UserDto userDto, string password, CancellationToken ct = default)
     {
         return await userManager.IsPasswordValidAsync(userDto.Id, password, ct);

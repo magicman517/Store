@@ -1,4 +1,4 @@
-﻿using Auth.Application.Interfaces;
+using Auth.Application.Interfaces;
 using Auth.Infrastructure.Data;
 using Auth.Infrastructure.Services;
 using Microsoft.AspNetCore.Identity;
@@ -10,6 +10,11 @@ namespace Auth.Infrastructure;
 
 public static class Injection
 {
+    /// <summary>
+    /// Configures and registers Auth-module infrastructure services into the provided DI container.
+    /// </summary>
+    /// <param name="services">The service collection to which infrastructure services will be added.</param>
+    /// <param name="configuration">Application configuration used to obtain the "AuthDB" connection string.</param>
     public static void AddInfrastructure(this IServiceCollection services, IConfiguration configuration)
     {
         services.AddDbContextPool<AuthContext>(opts =>

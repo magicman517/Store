@@ -1,4 +1,4 @@
-﻿using FastEndpoints;
+using FastEndpoints;
 using FluentValidation;
 using Microsoft.Extensions.Localization;
 
@@ -12,6 +12,10 @@ public record LoginRequest
 
 public class LoginRequestValidator : Validator<LoginRequest>
 {
+    /// <summary>
+    /// Initializes the validator with rules for LoginRequest and configures localized error messages for each rule.
+    /// </summary>
+    /// <param name="localizer">Provides localized strings for validation error messages.</param>
     public LoginRequestValidator(IStringLocalizer<LoginRequest> localizer)
     {
         RuleFor(x => x.Email)

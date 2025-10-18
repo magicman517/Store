@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using Microsoft.EntityFrameworkCore.Migrations;
 
 #nullable disable
@@ -8,7 +8,12 @@ namespace Auth.Infrastructure.Data.Migrations
     /// <inheritdoc />
     public partial class AddRefreshTokens : Migration
     {
-        /// <inheritdoc />
+        /// <summary>
+        /// Creates the RefreshTokens table for storing refresh tokens and their metadata.
+        /// </summary>
+        /// <remarks>
+        /// Adds columns: Id, Token, CreatedAt, UpdatedAt, ExpiresAt, and UserId; sets the primary key on Id; adds a foreign key from UserId to AspNetUsers.Id with cascade delete; and creates an index on UserId.
+        /// </remarks>
         protected override void Up(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.CreateTable(
