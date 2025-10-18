@@ -1,18 +1,20 @@
-﻿using Auth.Application.Interfaces;
+﻿using Auth.Application.Dtos.User.Requests;
+using Auth.Application.Interfaces;
 using Auth.Infrastructure.Data;
 using Common;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Localization;
 
 namespace Auth.Infrastructure.Services;
 
-public class UserManager(UserManager<ApplicationUser> userManager) : IUserManager
+public class UserManager(UserManager<ApplicationUser> userManager, IStringLocalizer<UserManager> localizer) : IUserManager
 {
     public async Task<Result<Guid>> CreateUserAsync(string email, string password, string? firstName, string? lastName, string? middleName,
         string? phone, CancellationToken ct = default)
     {
         var exists = await UserExistsAsync(email, ct);
-        if (exists) return Result<Guid>.Fail("Користувач з таким email вже існує", 409);
+        if (exists) return Result<Guid>.Fail(localizer["Error.Email.IsTaken"], 409);
 
         var user = new ApplicationUser
         {
@@ -30,7 +32,7 @@ public class UserManager(UserManager<ApplicationUser> userManager) : IUserManage
 
         var result = await userManager.CreateAsync(user, password);
         return !result.Succeeded
-            ? Result<Guid>.Fail("Внутрішня помилка сервера", 500)
+            ? Result<Guid>.Fail(localizer["Error.Internal"], 500)
             : Result<Guid>.Ok(user.Id);
     }
 
@@ -44,10 +46,22 @@ public class UserManager(UserManager<ApplicationUser> userManager) : IUserManage
     {
         var user = await userManager.FindByIdAsync(userId.ToString());
         if (user is null)
-            return Result<bool>.Fail("Користувача не знайдено", 404);
+            return Result<bool>.Fail(localizer["Error.User.NotFound"], 404);
 
         var isInRole = await userManager.IsInRoleAsync(user, role);
         return Result<bool>.Ok(isInRole);
+    }
+
+    public async Task<Result<bool>> AddToRoleAsync(Guid userId, string role, CancellationToken ct = default)
+    {
+        var user = await userManager.FindByIdAsync(userId.ToString());
+        if (user is null)
+            return Result<bool>.Fail(localizer["Error.User.NotFound"], 404);
+
+        var result = await userManager.AddToRoleAsync(user, role);
+        return result.Succeeded
+            ? Result<bool>.Ok(true)
+            : Result<bool>.Fail(localizer["Error.Internal"], 500);
     }
 
     public async Task<bool> HasUsersAsync(CancellationToken ct = default)

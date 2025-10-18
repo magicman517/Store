@@ -15,6 +15,7 @@ public interface IUserManager
 
     Task<bool> UserExistsAsync(string email, CancellationToken ct = default);
     Task<Result<bool>> IsInRoleAsync(Guid userId, string role, CancellationToken ct = default);
+    Task<Result<bool>> AddToRoleAsync(Guid userId, string role, CancellationToken ct = default);
 
     Task<bool> HasUsersAsync(CancellationToken ct = default);
 }
