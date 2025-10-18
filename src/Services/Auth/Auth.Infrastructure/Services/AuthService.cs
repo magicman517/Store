@@ -12,14 +12,29 @@ public class AuthService(
     IStringLocalizer<AuthService> localizer,
     ILogger<AuthService> logger) : IAuthService
 {
+    private static string MaskEmail(string email)
+    {
+        var parts = email.Split('@');
+        if (parts.Length != 2)
+            return "***";
+        
+        var local = parts[0];
+        var domain = parts[1];
+        
+        if (local.Length <= 2)
+            return $"{local[0]}***@{domain}";
+        
+        return $"{local[0]}***{local[^1]}@{domain}";
+    }
+
     public async Task<Result<TokenResponse>> AuthorizeAsync(string email, string password, CancellationToken ct = default)
     {
-        logger.LogInformation("Login attempt for user: {Email}", email);
+        logger.LogInformation("Login attempt for user: {Email}", MaskEmail(email));
         
         var userResult = await userService.GetUserByEmailAsync(email, ct);
         if (userResult.IsFailure)
         {
-            logger.LogWarning("Failed login attempt for user: {Email} - User not found", email);
+            logger.LogWarning("Failed login attempt for user: {Email} - User not found", MaskEmail(email));
             return Result<TokenResponse>.Fail(localizer["Error.Auth.InvalidCredentials"], 400);
         }
 
@@ -28,7 +43,7 @@ public class AuthService(
         var isPasswordValid = await userService.IsPasswordValidAsync(userDto, password, ct);
         if (!isPasswordValid)
         {
-            logger.LogWarning("Failed login attempt for user: {Email} - Invalid password", email);
+            logger.LogWarning("Failed login attempt for user: {Email} - Invalid password", MaskEmail(email));
             return Result<TokenResponse>.Fail(localizer["Error.Auth.InvalidCredentials"], 400);
         }
 
@@ -37,7 +52,7 @@ public class AuthService(
 
         await tokenService.PersistRefreshTokenAsync(userDto.Id, refreshToken, DateTimeOffset.UtcNow.AddDays(7), ct);
 
-        logger.LogInformation("Successful login for user: {Email}", email);
+        logger.LogInformation("Successful login for user: {Email}", MaskEmail(email));
         
         var tokenResponse = new TokenResponse
         {
