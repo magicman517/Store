@@ -27,11 +27,20 @@
     <data name="Error.Password.Digit" xml:space="preserve">
         <value>Пароль повинен містити щонайменше одну цифру</value>
     </data>
+    <data name="Error.Password.Lowercase" xml:space="preserve">
+        <value>Пароль повинен містити щонайменше одну малу літеру</value>
+    </data>
     <data name="Error.Password.MinLength" xml:space="preserve">
         <value>Пароль повинен містити щонайменше 8 символів</value>
     </data>
     <data name="Error.Password.NotEmpty" xml:space="preserve">
         <value>Пароль не може бути порожнім</value>
+    </data>
+    <data name="Error.Password.SpecialChar" xml:space="preserve">
+        <value>Пароль повинен містити щонайменше один спеціальний символ</value>
+    </data>
+    <data name="Error.Password.Uppercase" xml:space="preserve">
+        <value>Пароль повинен містити щонайменше одну велику літеру</value>
     </data>
     <data name="Error.Phone.InvalidFormat" xml:space="preserve">
         <value>Невірний формат телефону</value>

@@ -33,6 +33,15 @@
     <data name="Error.Password.Digit" xml:space="preserve">
         <value>Password must contain at least one digit</value>
     </data>
+    <data name="Error.Password.Uppercase" xml:space="preserve">
+        <value>Password must contain at least one uppercase letter</value>
+    </data>
+    <data name="Error.Password.Lowercase" xml:space="preserve">
+        <value>Password must contain at least one lowercase letter</value>
+    </data>
+    <data name="Error.Password.SpecialChar" xml:space="preserve">
+        <value>Password must contain at least one special character</value>
+    </data>
     <data name="Error.Phone.InvalidFormat" xml:space="preserve">
         <value>Incorrect phone format</value>
     </data>
