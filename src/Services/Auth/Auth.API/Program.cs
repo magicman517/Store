@@ -1,4 +1,5 @@
 using Aspire.ServiceDefaults;
+using Auth.Application;
 using Auth.Infrastructure;
 using Auth.Infrastructure.Data;
 using FastEndpoints;
@@ -22,10 +23,12 @@ builder.Services.Configure<RequestLocalizationOptions>(options =>
 builder.Services.AddAuthenticationJwtBearer(s => s.SigningKey = "development-signing-key-change-me-in-production");
 builder.Services.AddAuthorization();
 
+builder.Services.AddApplication();
+builder.Services.AddInfrastructure(builder.Configuration);
+
 builder.Services.AddFastEndpoints();
 builder.Services.AddOpenApi();
 
-builder.Services.AddInfrastructure(builder.Configuration);
 
 var app = builder.Build();
 

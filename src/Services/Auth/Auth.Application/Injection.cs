@@ -1,8 +1,10 @@
-﻿namespace Auth.Application;
+﻿using Microsoft.Extensions.DependencyInjection;
+
+namespace Auth.Application;
 
 public static class Injection
 {
-    // public static void AddApplication(this IServiceCollection services)
-    // {
-    // }
+    public static void AddApplication(this IServiceCollection services)
+    {
+    }
 }

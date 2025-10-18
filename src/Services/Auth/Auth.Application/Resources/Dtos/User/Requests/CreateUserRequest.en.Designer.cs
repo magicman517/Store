@@ -69,29 +69,11 @@ namespace Auth.Application.Resources.Dtos.User.Requests {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Email is already taken.
-        /// </summary>
-        internal static string Error_Email_IsTaken {
-            get {
-                return ResourceManager.GetString("Error.Email.IsTaken", resourceCulture);
-            }
-        }
-        
-        /// <summary>
         ///   Looks up a localized string similar to Email cannot be empty.
         /// </summary>
         internal static string Error_Email_NotEmpty {
             get {
                 return ResourceManager.GetString("Error.Email.NotEmpty", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Internal server error.
-        /// </summary>
-        internal static string Error_Internal {
-            get {
-                return ResourceManager.GetString("Error.Internal", resourceCulture);
             }
         }
         
@@ -128,15 +110,6 @@ namespace Auth.Application.Resources.Dtos.User.Requests {
         internal static string Error_Phone_InvalidFormat {
             get {
                 return ResourceManager.GetString("Error.Phone.InvalidFormat", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to User not found.
-        /// </summary>
-        internal static string Error_User_NotFound {
-            get {
-                return ResourceManager.GetString("Error.User.NotFound", resourceCulture);
             }
         }
     }

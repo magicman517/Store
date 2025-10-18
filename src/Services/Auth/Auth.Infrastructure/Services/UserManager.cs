@@ -8,7 +8,7 @@ using Microsoft.Extensions.Localization;
 
 namespace Auth.Infrastructure.Services;
 
-public class UserManager(UserManager<ApplicationUser> userManager, IStringLocalizer<CreateUserRequest> localizer) : IUserManager
+public class UserManager(UserManager<ApplicationUser> userManager, IStringLocalizer<UserManager> localizer) : IUserManager
 {
     public async Task<Result<Guid>> CreateUserAsync(string email, string password, string? firstName, string? lastName, string? middleName,
         string? phone, CancellationToken ct = default)

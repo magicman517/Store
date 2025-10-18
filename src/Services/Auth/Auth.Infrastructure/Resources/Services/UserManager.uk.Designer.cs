@@ -7,7 +7,7 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-namespace Auth.Application.Resources.Dtos.User.Requests {
+namespace Auth.Infrastructure.Resources.Services {
     using System;
     
     
@@ -21,14 +21,14 @@ namespace Auth.Application.Resources.Dtos.User.Requests {
     [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Resources.Tools.StronglyTypedResourceBuilder", "4.0.0.0")]
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
     [global::System.Runtime.CompilerServices.CompilerGeneratedAttribute()]
-    internal class CreateUserRequest_uk {
+    internal class UserManager_uk {
         
         private static global::System.Resources.ResourceManager resourceMan;
         
         private static global::System.Globalization.CultureInfo resourceCulture;
         
         [global::System.Diagnostics.CodeAnalysis.SuppressMessageAttribute("Microsoft.Performance", "CA1811:AvoidUncalledPrivateCode")]
-        internal CreateUserRequest_uk() {
+        internal UserManager_uk() {
         }
         
         /// <summary>
@@ -38,7 +38,7 @@ namespace Auth.Application.Resources.Dtos.User.Requests {
         internal static global::System.Resources.ResourceManager ResourceManager {
             get {
                 if (object.ReferenceEquals(resourceMan, null)) {
-                    global::System.Resources.ResourceManager temp = new global::System.Resources.ResourceManager("Auth.Application.Resources.Dtos.User.Requests.CreateUserRequest.uk", typeof(CreateUserRequest_uk).Assembly);
+                    global::System.Resources.ResourceManager temp = new global::System.Resources.ResourceManager("Auth.Infrastructure.Resources.Services.UserManager.uk", typeof(UserManager_uk).Assembly);
                     resourceMan = temp;
                 }
                 return resourceMan;
@@ -60,56 +60,29 @@ namespace Auth.Application.Resources.Dtos.User.Requests {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Некоректний формат електронної пошти.
+        ///   Looks up a localized string similar to Електронна адреса вже зайнята.
         /// </summary>
-        internal static string Error_Email_InvalidFormat {
+        internal static string Error_Email_IsTaken {
             get {
-                return ResourceManager.GetString("Error.Email.InvalidFormat", resourceCulture);
+                return ResourceManager.GetString("Error.Email.IsTaken", resourceCulture);
             }
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Eлектронна пошта не може бути порожньою.
+        ///   Looks up a localized string similar to Внутрішня помилка сервера.
         /// </summary>
-        internal static string Error_Email_NotEmpty {
+        internal static string Error_Internal {
             get {
-                return ResourceManager.GetString("Error.Email.NotEmpty", resourceCulture);
+                return ResourceManager.GetString("Error.Internal", resourceCulture);
             }
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Пароль повинен містити щонайменше одну цифру.
+        ///   Looks up a localized string similar to Користувача не знайдено.
         /// </summary>
-        internal static string Error_Password_Digit {
+        internal static string Error_User_NotFound {
             get {
-                return ResourceManager.GetString("Error.Password.Digit", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Пароль повинен містити щонайменше 8 символів.
-        /// </summary>
-        internal static string Error_Password_MinLength {
-            get {
-                return ResourceManager.GetString("Error.Password.MinLength", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Пароль не може бути порожнім.
-        /// </summary>
-        internal static string Error_Password_NotEmpty {
-            get {
-                return ResourceManager.GetString("Error.Password.NotEmpty", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Невірний формат телефону.
-        /// </summary>
-        internal static string Error_Phone_InvalidFormat {
-            get {
-                return ResourceManager.GetString("Error.Phone.InvalidFormat", resourceCulture);
+                return ResourceManager.GetString("Error.User.NotFound", resourceCulture);
             }
         }
     }

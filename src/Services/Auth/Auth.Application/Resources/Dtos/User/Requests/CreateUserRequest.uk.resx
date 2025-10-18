@@ -36,13 +36,4 @@
     <data name="Error.Phone.InvalidFormat" xml:space="preserve">
         <value>Невірний формат телефону</value>
     </data>
-    <data name="Error.Email.IsTaken" xml:space="preserve">
-        <value>Електронна адреса вже зайнята</value>
-    </data>
-    <data name="Error.Internal" xml:space="preserve">
-        <value>Внутрішня помилка сервера</value>
-    </data>
-    <data name="Error.User.NotFound" xml:space="preserve">
-        <value>Користувача не знайдено</value>
-    </data>
 </root>
