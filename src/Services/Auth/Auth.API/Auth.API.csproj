@@ -36,12 +36,12 @@
     </ItemGroup>
 
     <ItemGroup>
-      <Compile Update="Resources\Endpoint\CallbackEndpoint.en.Designer.cs">
+      <Compile Update="Resources\Endpoints\CallbackEndpoint.en.Designer.cs">
         <DesignTime>True</DesignTime>
         <AutoGen>True</AutoGen>
         <DependentUpon>CallbackEndpoint.en.resx</DependentUpon>
       </Compile>
-      <Compile Update="Resources\Endpoint\CallbackEndpoint.uk.Designer.cs">
+      <Compile Update="Resources\Endpoints\CallbackEndpoint.uk.Designer.cs">
         <DesignTime>True</DesignTime>
         <AutoGen>True</AutoGen>
         <DependentUpon>CallbackEndpoint.uk.resx</DependentUpon>
