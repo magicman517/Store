@@ -35,7 +35,7 @@ var keycloak = builder.AddKeycloak("Keycloak", 8081)
     .WithRealmImport("../KeycloakReams")
     .WithEnvironment("KC_HTTP_ENABLED", "true")
     .WithEnvironment("KC_PROXY_HEADERS", "xforwarded")
-    .WithEnvironment("KC_HTTP_RELATIVE_PATH", "/auth")
+    .WithEnvironment("KC_HTTP_RELATIVE_PATH", "/_/auth")
     .WithEnvironment("KC_DB", "postgres")
     .WithEnvironment("KC_DB_URL_HOST", postgres.Resource.PrimaryEndpoint.Property(EndpointProperty.Host))
     .WithEnvironment("KC_DB_URL_PORT", postgres.Resource.PrimaryEndpoint.Property(EndpointProperty.Port))
@@ -48,29 +48,35 @@ var web = builder.AddBunApp(
         Path.Combine(builder.AppHostDirectory, "..", "Web"),
         "dev")
     .WithBunPackageInstallation()
-    .WithHttpEndpoint(env: "PORT", port: 5173)
-    .WithReference(usersDb)
-    .WaitFor(usersDb);
+    .WithHttpEndpoint(env: "PORT", port: 5173);
 
 var authApi = builder.AddProject<Projects.Auth_API>("AuthAPI")
-    .WithReference(usersDb)
-    .WaitFor(usersDb);
-var usersApi = builder.AddProject<Projects.Users_API>("UsersAPI")
-    .WithReference(usersDb)
-    .WaitFor(usersDb);
-var cartApi = builder.AddProject<Projects.Cart_API>("CartAPI");
-var catalogApi = builder.AddProject<Projects.Catalog_API>("CatalogAPI");
-var notificationsApi = builder.AddProject<Projects.Notifications_API>("NotificationsAPI");
+    .WithReference(keycloak);
 
-var api = builder.AddYarp("ReverseProxy")
+var usersApi = builder.AddProject<Projects.Users_API>("UsersAPI")
+    .WithReference(keycloak);
+
+var cartApi = builder.AddProject<Projects.Cart_API>("CartAPI")
+    .WithReference(keycloak);
+
+var catalogApi = builder.AddProject<Projects.Catalog_API>("CatalogAPI")
+    .WithReference(keycloak);
+
+var notificationsApi = builder.AddProject<Projects.Notifications_API>("NotificationsAPI")
+    .WithReference(keycloak);
+
+var proxy = builder.AddYarp("Gateway")
     .WithHostPort(8080)
     .WithConfiguration(cfg =>
     {
-        cfg.AddRoute("/auth/{**catch-all}", keycloak);
-        cfg.AddRoute("/users/{**catch-all}", usersApi).WithTransformPathRemovePrefix("/users");
-        cfg.AddRoute("/catalog/{**catch-all}", catalogApi).WithTransformPathRemovePrefix("/catalog");
-        cfg.AddRoute("/cart/{**catch-all}", cartApi).WithTransformPathRemovePrefix("/cart");
-        cfg.AddRoute("/notifications/{**catch-all}", notificationsApi).WithTransformPathRemovePrefix("/notifications");
+        cfg.AddRoute("/_/auth/{**catch-all}", keycloak);
+        cfg.AddRoute("/_/api/auth/{**catch-all}", authApi).WithTransformPathRemovePrefix("/_/api/auth");
+        cfg.AddRoute("/_/api/users/{**catch-all}", usersApi).WithTransformPathRemovePrefix("/_/api/users");
+        cfg.AddRoute("/_/api/catalog/{**catch-all}", catalogApi).WithTransformPathRemovePrefix("/_/api/catalog");
+        cfg.AddRoute("/_/api/cart/{**catch-all}", cartApi).WithTransformPathRemovePrefix("/_/api/cart");
+        cfg.AddRoute("/_/api/notifications/{**catch-all}", notificationsApi).WithTransformPathRemovePrefix("/_/api/notifications");
+
+        cfg.AddRoute("/{**catch-all}", web.GetEndpoint("http"));
     });
 
 await builder.Build().RunAsync();

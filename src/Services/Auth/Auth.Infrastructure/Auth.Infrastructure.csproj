@@ -10,4 +10,28 @@
       <ProjectReference Include="..\Auth.Application\Auth.Application.csproj" />
     </ItemGroup>
 
+    <ItemGroup>
+      <EmbeddedResource Update="Resources\Services\AuthService.en.resx">
+        <Generator>ResXFileCodeGenerator</Generator>
+        <LastGenOutput>AuthService.en.Designer.cs</LastGenOutput>
+      </EmbeddedResource>
+      <EmbeddedResource Update="Resources\Services\AuthService.uk.resx">
+        <Generator>ResXFileCodeGenerator</Generator>
+        <LastGenOutput>AuthService.uk.Designer.cs</LastGenOutput>
+      </EmbeddedResource>
+    </ItemGroup>
+
+    <ItemGroup>
+      <Compile Update="Resources\Services\AuthService.en.Designer.cs">
+        <DesignTime>True</DesignTime>
+        <AutoGen>True</AutoGen>
+        <DependentUpon>AuthService.en.resx</DependentUpon>
+      </Compile>
+      <Compile Update="Resources\Services\AuthService.uk.Designer.cs">
+        <DesignTime>True</DesignTime>
+        <AutoGen>True</AutoGen>
+        <DependentUpon>AuthService.uk.resx</DependentUpon>
+      </Compile>
+    </ItemGroup>
+
 </Project>

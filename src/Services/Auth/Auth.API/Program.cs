@@ -1,19 +1,44 @@
+using Auth.Infrastructure;
 using FastEndpoints;
+using Scalar.AspNetCore;
 
 var builder = WebApplication.CreateBuilder(args);
 
-// builder.Services.AddFastEndpoints();
+builder.AddServiceDefaults();
+
+var supportedCultures = new[] { "en", "uk" };
+builder.Services.AddLocalization(options => options.ResourcesPath = "Resources");
+builder.Services.Configure<RequestLocalizationOptions>(options =>
+{
+    options.SetDefaultCulture(supportedCultures[0]);
+    options.AddSupportedCultures(supportedCultures);
+    options.AddSupportedUICultures(supportedCultures);
+});
+
+builder.Services.AddFastEndpoints();
 builder.Services.AddOpenApi();
+
+builder.Services.AddHttpClient();
+
+builder.Services.AddInfrastructure();
 
 var app = builder.Build();
 
 if (app.Environment.IsDevelopment())
 {
     app.MapOpenApi();
+    app.MapScalarApiReference("/reference", options =>
+    {
+        options
+            .WithTheme(ScalarTheme.Saturn)
+            .HideModels()
+            .HideClientButton()
+            .WithDefaultHttpClient(ScalarTarget.JavaScript, ScalarClient.Fetch);
+    });
 }
 
-// app.UseAuthorization();
+app.UseRequestLocalization();
 
-// app.UseFastEndpoints();
+app.UseFastEndpoints();
 
 await app.RunAsync();
