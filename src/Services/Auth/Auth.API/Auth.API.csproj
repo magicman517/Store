@@ -25,11 +25,11 @@
     </ItemGroup>
 
     <ItemGroup>
-      <EmbeddedResource Update="Resources\Endpoint\CallbackEndpoint.en.resx">
+      <EmbeddedResource Update="Resources\Endpoints\CallbackEndpoint.en.resx">
         <Generator>ResXFileCodeGenerator</Generator>
         <LastGenOutput>CallbackEndpoint.en.Designer.cs</LastGenOutput>
       </EmbeddedResource>
-      <EmbeddedResource Update="Resources\Endpoint\CallbackEndpoint.uk.resx">
+      <EmbeddedResource Update="Resources\Endpoints\CallbackEndpoint.uk.resx">
         <Generator>ResXFileCodeGenerator</Generator>
         <LastGenOutput>CallbackEndpoint.uk.Designer.cs</LastGenOutput>
       </EmbeddedResource>
