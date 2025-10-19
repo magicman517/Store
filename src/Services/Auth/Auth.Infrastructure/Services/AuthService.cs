@@ -66,13 +66,19 @@ public class AuthService(
         }
 
         var responseContent = await response.Content.ReadAsStringAsync(ct);
-        var tokens = JsonSerializer.Deserialize<TokensResponseDto>(responseContent);
-        if (tokens != null)
+        try
         {
-            return Result<TokensResponseDto>.Ok(tokens);
+            var tokens = JsonSerializer.Deserialize<TokensResponseDto>(responseContent);
+            if (tokens != null)
+            {
+                return Result<TokensResponseDto>.Ok(tokens);
+            }
+        }
+        catch (JsonException e)
+        {
+            logger.LogError(e, "Failed to deserialize token response");
         }
 
-        logger.LogError("Failed to deserialize token response");
         return Result<TokensResponseDto>.Fail(localizer["Error.Auth.Internal"], 500);
     }
 
@@ -99,13 +105,19 @@ public class AuthService(
         }
 
         var responseContent = await response.Content.ReadAsStringAsync(ct);
-        var tokens = JsonSerializer.Deserialize<TokensResponseDto>(responseContent);
-        if (tokens != null)
+        try
         {
-            return Result<TokensResponseDto>.Ok(tokens);
+            var tokens = JsonSerializer.Deserialize<TokensResponseDto>(responseContent);
+            if (tokens != null)
+            {
+                return Result<TokensResponseDto>.Ok(tokens);
+            }
         }
-
-        logger.LogError("Failed to deserialize token response");
+        catch (JsonException e)
+        {
+            logger.LogError(e, "Failed to deserialize refresh token response");
+        }
+        
         return Result<TokensResponseDto>.Fail(localizer["Error.Refresh.Internal"], 500);
     }
 }
