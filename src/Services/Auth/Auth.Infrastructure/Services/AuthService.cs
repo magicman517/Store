@@ -37,7 +37,7 @@ public class AuthService(
             AuthUrl = $"{_keycloakEndpoint}/realms/{_realm}/protocol/openid-connect/auth" +
                       $"?client_id={_clientId}" +
                       $"&response_type=code" +
-                      $"&scope=openid profile" +
+                      $"&scope={Uri.EscapeDataString("openid profile")}" +
                       $"&redirect_uri={Uri.EscapeDataString(_redirectUrl)}"
         };
     }
@@ -72,7 +72,7 @@ public class AuthService(
             return Result<TokensResponseDto>.Ok(tokens);
         }
 
-        logger.LogError("Failed to deserialize token response: {ResponseContent}", responseContent);
+        logger.LogError("Failed to deserialize token response");
         return Result<TokensResponseDto>.Fail(localizer["Error.Auth.Internal"], 500);
     }
 
@@ -105,7 +105,7 @@ public class AuthService(
             return Result<TokensResponseDto>.Ok(tokens);
         }
 
-        logger.LogError("Failed to deserialize token response: {ResponseContent}", responseContent);
+        logger.LogError("Failed to deserialize token response");
         return Result<TokensResponseDto>.Fail(localizer["Error.Refresh.Internal"], 500);
     }
 }
