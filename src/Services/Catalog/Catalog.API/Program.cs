@@ -11,6 +11,6 @@ if (app.Environment.IsDevelopment())
     app.MapOpenApi();
 }
 
-app.UseAuthorization();
+// app.UseAuthorization();
 
 app.Run();
