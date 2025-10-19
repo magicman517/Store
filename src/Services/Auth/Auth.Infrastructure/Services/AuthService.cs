@@ -15,17 +15,20 @@ public class AuthService(
     ILogger<AuthService> logger) : IAuthService
 {
     private readonly string _keycloakEndpoint =
-        configuration.GetValue<string>("Keycloak:Url") ?? "http://localhost:8081/auth";
+        configuration.GetValue<string>("Keycloak:Url") 
+        ?? throw new InvalidOperationException("Keycloak:Url configuration is required");
 
-    private readonly string _redirectUrl = configuration.GetValue<string>("Keycloak:RedirectUrl") ??
-                                           "http://localhost:8080/api/auth/callback";
+    private readonly string _redirectUrl = configuration.GetValue<string>("Keycloak:RedirectUrl")
+        ?? throw new InvalidOperationException("Keycloak:RedirectUrl configuration is required");
 
-    private readonly string _clientId = configuration.GetValue<string>("Keycloak:ClientId") ?? "confidential-client";
+    private readonly string _clientId = configuration.GetValue<string>("Keycloak:ClientId")
+        ?? throw new InvalidOperationException("Keycloak:ClientId configuration is required");
 
-    private readonly string _clientSecret =
-        configuration.GetValue<string>("Keycloak:ClientSecret") ?? "your-client-secret";
+    private readonly string _clientSecret = configuration.GetValue<string>("Keycloak:ClientSecret")
+        ?? throw new InvalidOperationException("Keycloak:ClientSecret configuration is required");
 
-    private readonly string _realm = configuration.GetValue<string>("Keycloak:Realm") ?? "store";
+    private readonly string _realm = configuration.GetValue<string>("Keycloak:Realm")
+        ?? throw new InvalidOperationException("Keycloak:Realm configuration is required");
 
     public AuthUrlResponseDto GetAuthUrl()
     {
