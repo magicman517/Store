@@ -11,4 +11,8 @@
       <PackageReference Include="FastEndpoints.Security" Version="7.0.1" />
     </ItemGroup>
 
+    <ItemGroup>
+      <ProjectReference Include="..\Auth.Core\Auth.Core.csproj" />
+    </ItemGroup>
+
 </Project>

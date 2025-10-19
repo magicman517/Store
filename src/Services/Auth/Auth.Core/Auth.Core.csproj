@@ -10,8 +10,4 @@
       <ProjectReference Include="..\..\..\BuildingBlocks\Common\Common.csproj" />
     </ItemGroup>
 
-    <ItemGroup>
-      <Folder Include="Repositories\" />
-    </ItemGroup>
-
 </Project>

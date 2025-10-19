@@ -7,6 +7,8 @@ using Users.Infrastructure.Data;
 
 var builder = WebApplication.CreateBuilder(args);
 
+builder.AddServiceDefaults();
+
 var supportedCultures = new[] { "en", "uk" };
 builder.Services.AddLocalization(options => options.ResourcesPath = "Resources");
 builder.Services.Configure<RequestLocalizationOptions>(options =>
@@ -23,7 +25,7 @@ builder.Services.AddAuthentication()
         options =>
         {
             options.Audience = "account";
-            options.Authority = "http://localhost:8080/auth/realms/store";
+            // options.Authority = "http://localhost:8080/auth/realms/store";
             if (builder.Environment.IsDevelopment())
             {
                 options.RequireHttpsMetadata = false;
@@ -34,7 +36,7 @@ builder.Services.AddAuthorization();
 builder.Services.AddApplication();
 builder.Services.AddInfrastructure(builder.Configuration);
 
-builder.Services.AddFastEndpoints();
+// builder.Services.AddFastEndpoints();
 builder.Services.AddOpenApi();
 
 var app = builder.Build();
@@ -63,6 +65,6 @@ app.UseRequestLocalization();
 app.UseAuthentication();
 app.UseAuthorization();
 
-app.UseFastEndpoints();
+// app.UseFastEndpoints();
 
 await app.RunAsync();

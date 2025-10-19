@@ -15,4 +15,8 @@
       <PackageReference Include="FastEndpoints.Security" Version="7.0.1" />
     </ItemGroup>
 
+    <ItemGroup>
+      <Folder Include="DTOs\" />
+    </ItemGroup>
+
 </Project>
