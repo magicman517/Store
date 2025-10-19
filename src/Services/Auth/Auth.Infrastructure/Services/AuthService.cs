@@ -58,9 +58,7 @@ public class AuthService(
 
         if (!response.IsSuccessStatusCode)
         {
-            var content = await response.Content.ReadAsStringAsync(ct);
-            logger.LogError("Token exchange failed with status code: {StatusCode}, {Content}", response.StatusCode,
-                content);
+            logger.LogError("Token exchange failed with status code: {StatusCode}", response.StatusCode);
             return Result<TokensResponseDto>.Fail(localizer["Error.Auth.Internal"], 500);
         }
 
@@ -93,9 +91,7 @@ public class AuthService(
 
         if (!response.IsSuccessStatusCode)
         {
-            var content = await response.Content.ReadAsStringAsync(ct);
-            logger.LogError("Token refresh failed with status code: {StatusCode}, {Content}", response.StatusCode,
-                content);
+            logger.LogError("Token refresh failed with status code: {StatusCode}", response.StatusCode);
             return Result<TokensResponseDto>.Fail(localizer["Error.Refresh.Internal"], 500);
         }
 

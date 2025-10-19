@@ -19,7 +19,7 @@
         <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
     </resheader>
     <data name="Error.Auth.Internal" xml:space="preserve">
-        <value>Внутрішня помилка сервера під час автентифікації. Спробуйте ще раз.</value>
+        <value>Внутрішня помилка сервера під час автентифікації. Спробуйте ще раз</value>
     </data>
     <data name="Error.Refresh.Internal" xml:space="preserve">
         <value>Внутрішня помилка сервера під час оновлення авторизації</value>

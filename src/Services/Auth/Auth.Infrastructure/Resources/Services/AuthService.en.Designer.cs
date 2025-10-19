@@ -60,7 +60,7 @@ namespace Auth.Infrastructure.Resources.Services {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Internal server error during authentication. Please try again..
+        ///   Looks up a localized string similar to Internal server error during authentication. Please try again.
         /// </summary>
         internal static string Error_Auth_Internal {
             get {
