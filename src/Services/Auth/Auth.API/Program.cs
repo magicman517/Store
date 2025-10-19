@@ -1,5 +1,6 @@
 using Auth.Infrastructure;
 using FastEndpoints;
+using Microsoft.AspNetCore.Localization;
 using Scalar.AspNetCore;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -13,6 +14,13 @@ builder.Services.Configure<RequestLocalizationOptions>(options =>
     options.SetDefaultCulture(supportedCultures[0]);
     options.AddSupportedCultures(supportedCultures);
     options.AddSupportedUICultures(supportedCultures);
+
+    options.RequestCultureProviders.Clear();
+    options.RequestCultureProviders.Add(new CookieRequestCultureProvider
+    {
+        CookieName = "PARAGLIDE_LOCALE"
+    });
+    options.RequestCultureProviders.Add(new AcceptLanguageHeaderRequestCultureProvider());
 });
 
 builder.Services.AddFastEndpoints();

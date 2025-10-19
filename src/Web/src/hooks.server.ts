@@ -1,4 +1,4 @@
-import type { Handle, HandleFetch } from '@sveltejs/kit';
+import type { Handle } from '@sveltejs/kit';
 import { paraglideMiddleware } from '$lib/paraglide/server';
 import { sequence } from '@sveltejs/kit/hooks';
 import { refreshAuth } from '@/services/authService';
@@ -11,13 +11,6 @@ const handleParaglide: Handle = ({ event, resolve }) =>
 			transformPageChunk: ({ html }) => html.replace('%paraglide.lang%', locale)
 		});
 	});
-
-export const handleFetch: HandleFetch = async ({ request, fetch, event }) => {
-	const locale = event.cookies.get('PARAGLIDE_LOCALE') ?? 'uk';
-	request.headers.set('Accept-Language', locale);
-
-	return fetch(request);
-};
 
 const handleAuth: Handle = async ({ event, resolve }) => {
 	const accessToken = event.cookies.get('SECURE_access_token');
