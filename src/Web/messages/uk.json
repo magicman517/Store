@@ -1,4 +1,31 @@
 {
 	"$schema": "https://inlang.com/schema/inlang-message-format",
-	"hello_world": "Hello, {name} from uk!"
+	"sidebar": {
+		"home": "Головна",
+		"login": "Увійти",
+		"logout": "Вийти",
+		"search": "Пошук",
+		"myProfile": "Мій профіль"
+	},
+	"signupForm": {
+		"emailLabel": "Електронна пошта",
+		"passwordLabel": "Пароль",
+		"repeatPasswordLabel": "Повторіть пароль",
+		"emailPlaceholder": "Введіть вашу електронну пошту",
+		"passwordPlaceholder": "Введіть ваш пароль",
+		"repeatPasswordPlaceholder": "Повторіть ваш пароль",
+		"loginButton": "Увійти",
+		"signupButton": "Зареєструватися",
+		"dontHaveAccountText": "Немає акаунту?",
+		"haveAccountText": "Вже є акаунт?",
+		"loginLinkText": "Увійти",
+		"signupLinkText": "Зареєструватися"
+	},
+	"formErrors": {
+		"invalidEmailError": "Недійсна адреса електронної пошти",
+		"passwordLengthError": "Пароль повинен містити щонайменше 8 символів",
+		"passwordLetterError": "Пароль повинен містити щонайменше одну літеру",
+		"passwordNumberError": "Пароль повинен містити щонайменше одну цифру",
+		"passwordsDoNotMatchError": "Паролі не співпадають"
+	}
 }

@@ -1,4 +1,31 @@
 {
 	"$schema": "https://inlang.com/schema/inlang-message-format",
-	"hello_world": "Hello, {name} from en!"
+	"sidebar": {
+		"home": "Home",
+		"login": "Log In",
+		"logout": "Log Out",
+		"search": "Search",
+		"myProfile": "My Profile"
+	},
+	"signupForm": {
+		"emailLabel": "Email",
+		"passwordLabel": "Password",
+		"repeatPasswordLabel": "Repeat Password",
+		"emailPlaceholder": "Enter your email",
+		"passwordPlaceholder": "Enter your password",
+		"repeatPasswordPlaceholder": "Repeat your password",
+		"loginButton": "Log In",
+		"signupButton": "Sign Up",
+		"dontHaveAccountText": "Don't have an account?",
+		"haveAccountText": "Already have an account?",
+		"loginLinkText": "Log In",
+		"signupLinkText": "Sign Up"
+	},
+	"formErrors": {
+		"invalidEmailError": "Invalid email address",
+		"passwordLengthError": "Password must be at least 8 characters long",
+		"passwordLetterError": "Password must contain at least one letter",
+		"passwordNumberError": "Password must contain at least one number",
+		"passwordsDoNotMatchError": "Passwords do not match"
+	}
 }
