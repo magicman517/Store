@@ -1,9 +1,6 @@
-using FastEndpoints;
-using Microsoft.EntityFrameworkCore;
 using Scalar.AspNetCore;
 using Users.Application;
 using Users.Infrastructure;
-using Users.Infrastructure.Data;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -40,12 +37,6 @@ builder.Services.AddInfrastructure(builder.Configuration);
 builder.Services.AddOpenApi();
 
 var app = builder.Build();
-
-await using (var scope = app.Services.CreateAsyncScope())
-{
-    var context = scope.ServiceProvider.GetRequiredService<UsersContext>();
-    await context.Database.MigrateAsync();
-}
 
 if (app.Environment.IsDevelopment())
 {
