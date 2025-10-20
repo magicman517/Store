@@ -1,22 +1,22 @@
 ﻿using Common;
+using Microsoft.Extensions.Localization;
 using Users.Core.Entities;
 using Users.Core.Repositories;
 using Users.Core.Services;
 
 namespace Users.Infrastructure.Services;
 
-public class UserService(IUserRepository userRepository, IHashingService hashingService) : IUserService
+public class UserService(IStringLocalizer<UserService> localizer, IUserRepository userRepository, IHashingService hashingService) : IUserService
 {
     private readonly IList<string> _defaultRoles = ["User"];
 
     public async Task<Result<Guid>> CreateUserAsync(string email, string? password, string? firstName = null, string? lastName = null,
         string? middleName = null, string? phoneNumber = null, CancellationToken ct = default)
     {
-        // TODO localize responses
         var existingUser =  await userRepository.GetByEmailAsync(email, ct);
         if (existingUser is not null)
         {
-            return Result<Guid>.Fail("User with this email already exists", 409);
+            return Result<Guid>.Fail(localizer["Error.Email.IsTaken"], 409);
         }
 
         var hashedPassword = password is not null ? hashingService.HashPassword(password) : null;

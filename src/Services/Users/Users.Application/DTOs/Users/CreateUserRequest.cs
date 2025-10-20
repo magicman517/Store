@@ -34,16 +34,6 @@ public class CreateUserRequestDtoValidator : Validator<CreateUserRequest>
             .When(x => !string.IsNullOrEmpty(x.Phone))
             .WithMessage(_ => localizer["Error.Phone.InvalidFormat"]);
 
-        RuleFor(x => x.FirstName)
-            .NotEmpty()
-            .When(x => !string.IsNullOrEmpty(x.LastName) || !string.IsNullOrEmpty(x.MiddleName))
-            .WithMessage(_ => localizer["Error.FirstName.RequiredWhenNameProvided"]);
-
-        RuleFor(x => x.LastName)
-            .NotEmpty()
-            .When(x => !string.IsNullOrEmpty(x.FirstName) || !string.IsNullOrEmpty(x.MiddleName))
-            .WithMessage(_ => localizer["Error.LastName.RequiredWhenNameProvided"]);
-
         const string lettersOnlyRegex = @"^\p{L}+$";
 
         RuleFor(x => x.FirstName)
