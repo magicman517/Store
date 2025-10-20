@@ -1,0 +1,11 @@
+﻿namespace Users.Core.Services;
+
+public interface ITokenService
+{
+    string GenerateAccessToken(Guid userId, IEnumerable<string> roles);
+    string GenerateRefreshToken();
+
+    Task PersistRefreshTokenAsync(Guid userId, string refreshToken, DateTime expiresAt, CancellationToken ct = default);
+    Task<bool> ValidateRefreshTokenAsync(Guid userId, string refreshToken, CancellationToken ct = default);
+    Task RevokeRefreshTokenAsync(Guid userId, string refreshToken, CancellationToken ct = default);
+}
