@@ -16,7 +16,8 @@
     </ItemGroup>
 
     <ItemGroup>
-      <Folder Include="DTOs\" />
+      <Folder Include="DTOs\Auth\" />
+      <Folder Include="Resources\" />
     </ItemGroup>
 
 </Project>
