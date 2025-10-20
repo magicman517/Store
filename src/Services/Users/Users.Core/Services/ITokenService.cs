@@ -8,6 +8,6 @@ public interface ITokenService
     string GenerateRefreshToken();
 
     Task PersistRefreshTokenAsync(Guid userId, string refreshToken, DateTime expiresAt, CancellationToken ct = default);
-    Task<Result<bool>> ValidateRefreshTokenAsync(string refreshToken, CancellationToken ct = default);
+    Task<Result<Guid>> ValidateRefreshTokenAsync(string refreshToken, CancellationToken ct = default);
     Task RevokeRefreshTokenAsync(string refreshToken, CancellationToken ct = default);
 }

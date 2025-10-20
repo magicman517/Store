@@ -10,6 +10,7 @@ namespace Users.Infrastructure.Services;
 
 public class AuthService(
     IUserRepository userRepository,
+    IRefreshTokenRepository refreshTokenRepository,
     ILinkedAccountRepository linkedAccountRepository,
     IHashingService hashingService,
     ITokenService tokenService,
@@ -57,7 +58,38 @@ public class AuthService(
             await linkedAccountRepository.AddAsync(linkedAccount, ct);
         }
 
+        var existingLinkedAccount = await linkedAccountRepository.GetByProviderAndProviderUserIdAsync(provider, providerUserId, ct);
+        if (existingLinkedAccount is null)
+        {
+            var linkedAccount = new LinkedAccount
+            {
+                Provider = provider,
+                ProviderUserId = providerUserId,
+                UserId = user.Id
+            };
+            await linkedAccountRepository.AddAsync(linkedAccount, ct);
+        }
+
         var response = await GenerateTokensAsync(user, ct);
+        return Result<TokenResponseDto>.Ok(response);
+    }
+
+    public async Task<Result<TokenResponseDto>> RefreshAuthAsync(string refreshToken, CancellationToken ct = default)
+    {
+        var isTokenValidResult = await tokenService.ValidateRefreshTokenAsync(refreshToken, ct);
+        if (isTokenValidResult.IsFailure)
+        {
+            return Result<TokenResponseDto>.Fail(isTokenValidResult.Error, isTokenValidResult.StatusCode);
+        }
+
+        var user = await userRepository.GetByIdAsync(isTokenValidResult.Value, ct);
+        if (user is null)
+        {
+            return Result<TokenResponseDto>.Fail(localizer["Error.RefreshToken.Invalid"], 401);
+        }
+
+        var response = await GenerateTokensAsync(user, ct);
+        await tokenService.RevokeRefreshTokenAsync(refreshToken, ct);
         return Result<TokenResponseDto>.Ok(response);
     }
 

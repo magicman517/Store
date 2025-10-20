@@ -54,17 +54,17 @@ public class TokenService(
         await refreshTokenRepository.AddAsync(token, ct);
     }
 
-    public async Task<Result<bool>> ValidateRefreshTokenAsync(string refreshToken, CancellationToken ct = default)
+    public async Task<Result<Guid>> ValidateRefreshTokenAsync(string refreshToken, CancellationToken ct = default)
     {
         var hashedToken = HashToken(refreshToken);
         var token = await refreshTokenRepository.GetByTokenAsync(hashedToken, ct);
 
         if (token is null || token.ExpiresAt < DateTime.UtcNow)
         {
-            return Result<bool>.Fail(localizer["Error.RefreshToken.Invalid"], 401);
+            return Result<Guid>.Fail(localizer["Error.RefreshToken.Invalid"], 401);
         }
 
-        return Result<bool>.Ok(true);
+        return Result<Guid>.Ok(token.UserId);
     }
 
     public async Task RevokeRefreshTokenAsync(string refreshToken, CancellationToken ct = default)

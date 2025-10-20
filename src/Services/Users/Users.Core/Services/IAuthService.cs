@@ -11,4 +11,6 @@ public interface IAuthService
 
     Task<Result<TokenResponseDto>> LoginWithOauthAsync(OauthProvider provider, string providerEmail,
         string providerUserId, CancellationToken ct = default);
+
+    Task<Result<TokenResponseDto>> RefreshAuthAsync(string refreshToken, CancellationToken ct = default);
 }
