@@ -1,4 +1,6 @@
-﻿namespace Users.Core.Services;
+﻿using Common;
+
+namespace Users.Core.Services;
 
 public interface ITokenService
 {
@@ -6,6 +8,6 @@ public interface ITokenService
     string GenerateRefreshToken();
 
     Task PersistRefreshTokenAsync(Guid userId, string refreshToken, DateTime expiresAt, CancellationToken ct = default);
-    Task<bool> ValidateRefreshTokenAsync(Guid userId, string refreshToken, CancellationToken ct = default);
-    Task RevokeRefreshTokenAsync(Guid userId, string refreshToken, CancellationToken ct = default);
+    Task<Result<bool>> ValidateRefreshTokenAsync(string refreshToken, CancellationToken ct = default);
+    Task RevokeRefreshTokenAsync(string refreshToken, CancellationToken ct = default);
 }

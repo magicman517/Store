@@ -1,4 +1,5 @@
 ﻿using Common;
+using Users.Core.Entities;
 
 namespace Users.Core.Services;
 
@@ -12,4 +13,7 @@ public interface IUserService
         string? middleName = null,
         string? phoneNumber = null,
         CancellationToken ct = default);
+
+    Task<Result<User>> GetByIdAsync(Guid id, CancellationToken ct = default);
+    Task<Result<User>> GetByEmailAsync(string email, CancellationToken ct = default);
 }
