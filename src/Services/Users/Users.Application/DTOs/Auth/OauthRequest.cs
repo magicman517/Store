@@ -8,9 +8,9 @@ namespace Users.Application.DTOs.Auth;
 public record OauthRequest
 {
     [JsonConverter(typeof(JsonStringEnumConverter))]
-    public required OauthProvider Provider { get; set; }
-    public required string ProviderUserId { get; set; }
-    public required string Email { get; set; }
+    public required OauthProvider Provider { get; init; }
+    public required string ProviderUserId { get; init; }
+    public required string Email { get; init; }
 }
 
 public class OauthRequestValidator : Validator<OauthRequest>
