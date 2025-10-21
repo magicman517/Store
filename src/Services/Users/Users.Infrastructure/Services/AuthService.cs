@@ -1,20 +1,23 @@
 ﻿using Common;
 using Microsoft.Extensions.Localization;
+using Microsoft.Extensions.Logging;
 using Users.Core.Common;
 using Users.Core.DTOs;
 using Users.Core.Entities;
 using Users.Core.Repositories;
 using Users.Core.Services;
+using Users.Infrastructure.Data;
 
 namespace Users.Infrastructure.Services;
 
 public class AuthService(
     IUserRepository userRepository,
-    IRefreshTokenRepository refreshTokenRepository,
     ILinkedAccountRepository linkedAccountRepository,
     IHashingService hashingService,
     ITokenService tokenService,
-    IStringLocalizer<AuthService> localizer) : IAuthService
+    UsersDbContext context,
+    IStringLocalizer<AuthService> localizer,
+    ILogger<AuthService> logger) : IAuthService
 {
     public async Task<Result<TokenResponseDto>> LoginWithPasswordAsync(string email, string password,
         CancellationToken ct = default)
@@ -22,13 +25,13 @@ public class AuthService(
         var user = await userRepository.GetByEmailAsync(email, ct);
         if (user?.PasswordHash is null)
         {
-            return Result<TokenResponseDto>.Fail(localizer["Error.InvalidCredentials"], 401);
+            return Result<TokenResponseDto>.Fail(localizer["Error.Credentials.Invalid"], 401);
         }
 
         var isPasswordValid = hashingService.VerifyPassword(password, user.PasswordHash);
         if (!isPasswordValid)
         {
-            return Result<TokenResponseDto>.Fail(localizer["Error.InvalidCredentials"], 401);
+            return Result<TokenResponseDto>.Fail(localizer["Error.Credentials.Invalid"], 401);
         }
 
         var response = await GenerateTokensAsync(user, ct);
@@ -39,39 +42,53 @@ public class AuthService(
         string providerUserId,
         CancellationToken ct = default)
     {
-        var user = await userRepository.GetByEmailAsync(providerEmail, ct);
-        if (user is null)
+        await using var transaction = await context.Database.BeginTransactionAsync(ct);
+        try
         {
-            user = new User
+            var user = await userRepository.GetByEmailAsync(providerEmail, ct);
+            if (user is null)
             {
-                Email = providerEmail,
-                Roles = ["User"]
-            };
-            await userRepository.AddAsync(user, ct);
+                user = new User
+                {
+                    Email = providerEmail,
+                    Roles = ["User"],
+                    EmailConfirmed = false
+                };
+                await userRepository.AddAsync(user, ct);
 
-            var linkedAccount = new LinkedAccount
+                var linkedAccount = new LinkedAccount
+                {
+                    Provider = provider,
+                    ProviderUserId = providerUserId,
+                    UserId = user.Id
+                };
+                await linkedAccountRepository.AddAsync(linkedAccount, ct);
+            }
+
+            var existingLinkedAccount =
+                await linkedAccountRepository.GetByProviderAndProviderUserIdAsync(provider, providerUserId, ct);
+            if (existingLinkedAccount is null)
             {
-                Provider = provider,
-                ProviderUserId = providerUserId,
-                UserId = user.Id
-            };
-            await linkedAccountRepository.AddAsync(linkedAccount, ct);
+                var linkedAccount = new LinkedAccount
+                {
+                    Provider = provider,
+                    ProviderUserId = providerUserId,
+                    UserId = user.Id
+                };
+                await linkedAccountRepository.AddAsync(linkedAccount, ct);
+            }
+
+            var response = await GenerateTokensAsync(user, ct);
+            await transaction.CommitAsync(ct);
+            return Result<TokenResponseDto>.Ok(response);
         }
-
-        var existingLinkedAccount = await linkedAccountRepository.GetByProviderAndProviderUserIdAsync(provider, providerUserId, ct);
-        if (existingLinkedAccount is null)
+        catch (Exception e)
         {
-            var linkedAccount = new LinkedAccount
-            {
-                Provider = provider,
-                ProviderUserId = providerUserId,
-                UserId = user.Id
-            };
-            await linkedAccountRepository.AddAsync(linkedAccount, ct);
+            logger.LogError(e, "Error during OAuth login for provider {Provider} and user ID {ProviderUserId}",
+                provider, providerUserId);
+            await transaction.RollbackAsync(ct);
+            return Result<TokenResponseDto>.Fail(localizer["Error.Internal"], 500);
         }
-
-        var response = await GenerateTokensAsync(user, ct);
-        return Result<TokenResponseDto>.Ok(response);
     }
 
     public async Task<Result<TokenResponseDto>> RefreshAuthAsync(string refreshToken, CancellationToken ct = default)

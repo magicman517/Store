@@ -21,14 +21,14 @@ namespace Users.Infrastructure.Resources.Services {
     [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Resources.Tools.StronglyTypedResourceBuilder", "4.0.0.0")]
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
     [global::System.Runtime.CompilerServices.CompilerGeneratedAttribute()]
-    internal class UserService_en {
+    internal class TokenService_en {
         
         private static global::System.Resources.ResourceManager resourceMan;
         
         private static global::System.Globalization.CultureInfo resourceCulture;
         
         [global::System.Diagnostics.CodeAnalysis.SuppressMessageAttribute("Microsoft.Performance", "CA1811:AvoidUncalledPrivateCode")]
-        internal UserService_en() {
+        internal TokenService_en() {
         }
         
         /// <summary>
@@ -38,7 +38,7 @@ namespace Users.Infrastructure.Resources.Services {
         internal static global::System.Resources.ResourceManager ResourceManager {
             get {
                 if (object.ReferenceEquals(resourceMan, null)) {
-                    global::System.Resources.ResourceManager temp = new global::System.Resources.ResourceManager("Users.Infrastructure.Resources.Services.UserService.en", typeof(UserService_en).Assembly);
+                    global::System.Resources.ResourceManager temp = new global::System.Resources.ResourceManager("Users.Infrastructure.Resources.Services.TokenService.en", typeof(TokenService_en).Assembly);
                     resourceMan = temp;
                 }
                 return resourceMan;
@@ -60,20 +60,11 @@ namespace Users.Infrastructure.Resources.Services {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Email is already taken.
+        ///   Looks up a localized string similar to Invalid refresh token.
         /// </summary>
-        internal static string Error_Email_IsTaken {
+        internal static string Error_RefreshToken_Invalid {
             get {
-                return ResourceManager.GetString("Error.Email.IsTaken", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to User not found.
-        /// </summary>
-        internal static string Error_User_NotFound {
-            get {
-                return ResourceManager.GetString("Error.User.NotFound", resourceCulture);
+                return ResourceManager.GetString("Error.RefreshToken.Invalid", resourceCulture);
             }
         }
     }

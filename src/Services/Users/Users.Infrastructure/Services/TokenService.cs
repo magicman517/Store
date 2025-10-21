@@ -13,7 +13,7 @@ namespace Users.Infrastructure.Services;
 public class TokenService(
     IRefreshTokenRepository refreshTokenRepository,
     IConfiguration configuration,
-    IStringLocalizer<TokenResponse> localizer) : ITokenService
+    IStringLocalizer<TokenService> localizer) : ITokenService
 {
     private readonly string _jwtSigningKey = configuration["Jwt:SigningKey"] ??
                                              throw new InvalidOperationException("JWT:SigningKey is not configured");
