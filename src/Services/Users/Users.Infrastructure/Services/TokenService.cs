@@ -33,9 +33,7 @@ public class TokenService(
 
     public string GenerateRefreshToken()
     {
-        var randomNumber = new byte[32];
-        RandomNumberGenerator.GetBytes(randomNumber);
-        return Convert.ToBase64String(randomNumber);
+        return Convert.ToBase64String(RandomNumberGenerator.GetBytes(32));
     }
 
     public async Task PersistRefreshTokenAsync(Guid userId, string refreshToken, DateTime expiresAt,
