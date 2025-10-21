@@ -15,12 +15,18 @@ public class UserRepository(UsersDbContext context) : IUserRepository
 
     public async Task<User?> GetByIdAsync(Guid id, CancellationToken ct = default)
     {
-        return await context.Users.FirstOrDefaultAsync(u => u.Id == id, ct);
+        return await context.Users
+            .AsNoTracking()
+            .Include(u => u.LinkedAccounts)
+            .FirstOrDefaultAsync(u => u.Id == id, ct);
     }
 
     public async Task<User?> GetByEmailAsync(string email, CancellationToken ct = default)
     {
-        return await context.Users.FirstOrDefaultAsync(u => u.Email == email, ct);
+        return await context.Users
+            .AsNoTracking()
+            .Include(u => u.LinkedAccounts)
+            .FirstOrDefaultAsync(u => u.Email == email, ct);
     }
 
     public async Task UpdateAsync(User user, CancellationToken ct = default)

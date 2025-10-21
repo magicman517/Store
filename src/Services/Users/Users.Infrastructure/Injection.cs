@@ -19,10 +19,12 @@ public static class Injection
         services.AddSingleton<IHashingService, HashingService>();
 
         services.AddScoped<IUserRepository, UserRepository>();
+        services.AddScoped<ILinkedAccountRepository, LinkedAccountRepository>();
         services.AddScoped<IRefreshTokenRepository, RefreshTokenRepository>();
 
         services.AddScoped<IUserService, UserService>();
         services.AddScoped<ITokenService, TokenService>();
+        services.AddScoped<IAuthService, AuthService>();
 
         return services;
     }

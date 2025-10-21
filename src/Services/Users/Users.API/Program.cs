@@ -1,4 +1,5 @@
 using FastEndpoints;
+using FastEndpoints.Security;
 using Microsoft.EntityFrameworkCore;
 using Scalar.AspNetCore;
 using Users.Application;
@@ -21,7 +22,7 @@ builder.Services.Configure<RequestLocalizationOptions>(options =>
     options.AddSupportedUICultures(supportedCultures);
 });
 
-builder.Services.AddAuthentication();
+builder.Services.AddAuthenticationJwtBearer(s => s.SigningKey = builder.Configuration["Jwt:SigningKey"]);
 builder.Services.AddAuthorization();
 
 builder.Services.AddApplication();

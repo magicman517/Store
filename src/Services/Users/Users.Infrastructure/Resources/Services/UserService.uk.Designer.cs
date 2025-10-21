@@ -67,5 +67,14 @@ namespace Users.Infrastructure.Resources.Services {
                 return ResourceManager.GetString("Error.Email.IsTaken", resourceCulture);
             }
         }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Користувача не знайдено.
+        /// </summary>
+        internal static string Error_User_NotFound {
+            get {
+                return ResourceManager.GetString("Error.User.NotFound", resourceCulture);
+            }
+        }
     }
 }

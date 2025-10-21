@@ -16,4 +16,6 @@ public class User : BaseEntity
     public string? MiddleName { get; set; }
 
     public string? PhoneNumber { get; set; }
+
+    public bool EmailConfirmed { get; set; }
 }
