@@ -52,17 +52,9 @@ public class AuthService(
                 {
                     Email = providerEmail,
                     Roles = ["User"],
-                    EmailConfirmed = false
+                    EmailConfirmed = true
                 };
                 await userRepository.AddAsync(user, ct);
-
-                var linkedAccount = new LinkedAccount
-                {
-                    Provider = provider,
-                    ProviderUserId = providerUserId,
-                    UserId = user.Id
-                };
-                await linkedAccountRepository.AddAsync(linkedAccount, ct);
             }
 
             var existingLinkedAccount =
