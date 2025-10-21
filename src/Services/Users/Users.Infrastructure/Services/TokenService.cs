@@ -16,7 +16,7 @@ public class TokenService(
     IStringLocalizer<TokenService> localizer) : ITokenService
 {
     private readonly string _jwtSigningKey = configuration["Jwt:SigningKey"] ??
-                                             throw new InvalidOperationException("JWT:SigningKey is not configured");
+                                             throw new InvalidOperationException("Jwt:SigningKey is not configured");
 
     public string GenerateAccessToken(Guid userId, IEnumerable<string> roles)
     {
