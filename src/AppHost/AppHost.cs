@@ -41,8 +41,10 @@ var cartApi = builder.AddProject<Projects.Cart_API>("CartAPI")
 var catalogApi = builder.AddProject<Projects.Catalog_API>("CatalogAPI")
     .WithReference(catalogDb)
     .WithReference(redis)
+    .WithReference(minio)
     .WaitFor(catalogDb)
-    .WaitFor(redis);
+    .WaitFor(redis)
+    .WaitFor(minio);
 
 var notificationsApi = builder.AddProject<Projects.Notifications_API>("NotificationsAPI")
     .WithReference(rabbitMq)

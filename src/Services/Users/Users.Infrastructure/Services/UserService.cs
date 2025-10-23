@@ -6,7 +6,7 @@ using Users.Core.Services;
 
 namespace Users.Infrastructure.Services;
 
-public class UserService(IStringLocalizer<UserService> localizer, IUserRepository userRepository, IHashingService hashingService) : IUserService
+public class UserService(IUserRepository userRepository, IHashingService hashingService) : IUserService
 {
     private readonly IList<string> _defaultRoles = ["User"];
 
@@ -16,7 +16,7 @@ public class UserService(IStringLocalizer<UserService> localizer, IUserRepositor
         var existingUser =  await userRepository.GetByEmailAsync(email, ct);
         if (existingUser is not null)
         {
-            return Result<Guid>.Fail(localizer["Error.Email.IsTaken"], 409);
+            return Result<Guid>.Fail("Електронна адреса вже зайнята", 409);
         }
 
         var hashedPassword = password is not null ? hashingService.HashPassword(password) : null;
@@ -40,7 +40,7 @@ public class UserService(IStringLocalizer<UserService> localizer, IUserRepositor
     {
         var user = await userRepository.GetByIdAsync(id, ct);
         return user is null
-            ? Result<User>.Fail(localizer["Error.User.NotFound"], 404)
+            ? Result<User>.Fail("Користувача не знайдено", 404)
             : Result<User>.Ok(user);
     }
 
@@ -48,7 +48,7 @@ public class UserService(IStringLocalizer<UserService> localizer, IUserRepositor
     {
         var user = await userRepository.GetByEmailAsync(email, ct);
         return user is null
-            ? Result<User>.Fail(localizer["Error.User.NotFound"], 404)
+            ? Result<User>.Fail("Користувача не знайдено", 404)
             : Result<User>.Ok(user);
     }
 }

@@ -18,37 +18,37 @@ public record CreateUserRequest
 
 public class CreateUserRequestDtoValidator : Validator<CreateUserRequest>
 {
-    public CreateUserRequestDtoValidator(IStringLocalizer<CreateUserRequest> localizer)
+    public CreateUserRequestDtoValidator()
     {
         RuleFor(x => x.Email)
-            .NotEmpty().WithMessage(_ => localizer["Error.Email.NotEmpty"])
-            .EmailAddress().WithMessage(_ => localizer["Error.Email.InvalidFormat"]);
+            .NotEmpty().WithMessage("Поле електронної пошти не може бути порожнім")
+            .EmailAddress().WithMessage("Недійсний формат електронної пошти");
 
         RuleFor(x => x.Password)
-            .NotEmpty().WithMessage(_ => localizer["Error.Password.NotEmpty"])
-            .MinimumLength(8).WithMessage(_ => localizer["Error.Password.MinLength"])
-            .Matches("[0-9]+").WithMessage(_ => localizer["Error.Password.NoDigit"]);
+            .NotEmpty().WithMessage("Пароль не може бути порожнім")
+            .MinimumLength(8).WithMessage("Пароль має містити щонайменше 8 символів")
+            .Matches("[0-9]+").WithMessage("Пароль має містити щонайменше одну цифру");
 
         RuleFor(x => x.Phone)
             .Matches(@"^\+380\d{9}$")
             .When(x => !string.IsNullOrEmpty(x.Phone))
-            .WithMessage(_ => localizer["Error.Phone.InvalidFormat"]);
+            .WithMessage("Телефонний номер має відповідати формату +(380)xxxxxxxxx");
 
         const string lettersOnlyRegex = @"^\p{L}+$";
 
         RuleFor(x => x.FirstName)
             .Matches(lettersOnlyRegex)
             .When(x => !string.IsNullOrEmpty(x.FirstName))
-            .WithMessage(_ => localizer["Error.FirstName.LettersOnly"]);
+            .WithMessage("Ім'я має містити лише літери");
 
         RuleFor(x => x.LastName)
             .Matches(lettersOnlyRegex)
             .When(x => !string.IsNullOrEmpty(x.LastName))
-            .WithMessage(_ => localizer["Error.LastName.LettersOnly"]);
+            .WithMessage("Прізвище має містити лише літери");
 
         RuleFor(x => x.MiddleName)
             .Matches(lettersOnlyRegex)
             .When(x => !string.IsNullOrEmpty(x.MiddleName))
-            .WithMessage(_ => localizer["Error.MiddleName.LettersOnly"]);
+            .WithMessage("По батькові має містити лише літери");
     }
 }

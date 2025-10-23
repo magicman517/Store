@@ -1,6 +1,5 @@
 ﻿using FastEndpoints;
 using FluentValidation;
-using Microsoft.Extensions.Localization;
 
 namespace Users.Application.DTOs.Auth;
 
@@ -12,14 +11,14 @@ public record LoginRequest
 
 public class LoginRequestValidator : Validator<LoginRequest>
 {
-    public LoginRequestValidator(IStringLocalizer<LoginRequest> localizer)
+    public LoginRequestValidator()
     {
         RuleFor(x => x.Email)
-            .NotEmpty().WithMessage(_ => localizer["Error.Email.NotEmpty"])
-            .EmailAddress().WithMessage(_ => localizer["Error.Email.InvalidFormat"]);
+            .NotEmpty().WithMessage("Поле електронної пошти не може бути порожнім")
+            .EmailAddress().WithMessage("Недійсний формат електронної пошти");
 
         RuleFor(x => x.Password)
-            .NotEmpty().WithMessage(_ => localizer["Error.Password.NotEmpty"])
-            .MinimumLength(8).WithMessage(_ => localizer["Error.Password.MinLength"]);
+            .NotEmpty().WithMessage("Пароль не може бути порожнім")
+            .MinimumLength(8).WithMessage("Пароль має містити щонайменше 8 символів");
     }
 }

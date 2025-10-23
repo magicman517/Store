@@ -16,7 +16,6 @@ public class AuthService(
     IHashingService hashingService,
     ITokenService tokenService,
     UsersDbContext context,
-    IStringLocalizer<AuthService> localizer,
     ILogger<AuthService> logger) : IAuthService
 {
     public async Task<Result<TokenResponseDto>> LoginWithPasswordAsync(string email, string password,
@@ -25,13 +24,13 @@ public class AuthService(
         var user = await userRepository.GetByEmailAsync(email, ct);
         if (user?.PasswordHash is null)
         {
-            return Result<TokenResponseDto>.Fail(localizer["Error.Credentials.Invalid"], 401);
+            return Result<TokenResponseDto>.Fail("Недійсні облікові дані", 401);
         }
 
         var isPasswordValid = hashingService.VerifyPassword(password, user.PasswordHash);
         if (!isPasswordValid)
         {
-            return Result<TokenResponseDto>.Fail(localizer["Error.Credentials.Invalid"], 401);
+            return Result<TokenResponseDto>.Fail("Недійсні облікові дані", 401);
         }
 
         var response = await GenerateTokensAsync(user, ct);
@@ -79,7 +78,7 @@ public class AuthService(
             logger.LogError(e, "Error during OAuth login for provider {Provider} and user ID {ProviderUserId}",
                 provider, providerUserId);
             await transaction.RollbackAsync(ct);
-            return Result<TokenResponseDto>.Fail(localizer["Error.Internal"], 500);
+            return Result<TokenResponseDto>.Fail("Внутрішня помилка сервера", 500);
         }
     }
 
@@ -94,7 +93,7 @@ public class AuthService(
         var user = await userRepository.GetByIdAsync(isTokenValidResult.Value, ct);
         if (user is null)
         {
-            return Result<TokenResponseDto>.Fail(localizer["Error.RefreshToken.Invalid"], 401);
+            return Result<TokenResponseDto>.Fail("Недійсний токен оновлення", 401);
         }
 
         var response = await GenerateTokensAsync(user, ct);

@@ -12,8 +12,7 @@ namespace Users.Infrastructure.Services;
 
 public class TokenService(
     IRefreshTokenRepository refreshTokenRepository,
-    IConfiguration configuration,
-    IStringLocalizer<TokenService> localizer) : ITokenService
+    IConfiguration configuration) : ITokenService
 {
     private readonly string _jwtSigningKey = configuration["Jwt:SigningKey"] ??
                                              throw new InvalidOperationException("Jwt:SigningKey is not configured");
@@ -58,7 +57,7 @@ public class TokenService(
 
         if (token is null || token.ExpiresAt < DateTime.UtcNow)
         {
-            return Result<Guid>.Fail(localizer["Error.RefreshToken.Invalid"], 401);
+            return Result<Guid>.Fail("Недійсний токен оновлення", 401);
         }
 
         return Result<Guid>.Ok(token.UserId);

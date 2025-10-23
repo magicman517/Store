@@ -7,10 +7,11 @@
     </PropertyGroup>
 
     <ItemGroup>
-      <ProjectReference Include="..\Users.Application\Users.Application.csproj" />
+      <ProjectReference Include="..\Catalog.Application\Catalog.Application.csproj" />
     </ItemGroup>
 
     <ItemGroup>
+      <PackageReference Include="CommunityToolkit.Aspire.Minio.Client" Version="9.8.0" />
       <PackageReference Include="Npgsql.EntityFrameworkCore.PostgreSQL" Version="9.0.4" />
     </ItemGroup>
 

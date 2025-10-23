@@ -15,32 +15,4 @@
       <PackageReference Include="FastEndpoints.Security" Version="7.0.1" />
     </ItemGroup>
 
-    <ItemGroup>
-      <Folder Include="Resources\DTOs\Auth\" />
-    </ItemGroup>
-
-    <ItemGroup>
-      <EmbeddedResource Update="Resources\DTOs\Users\CreateUserRequest.en.resx">
-        <Generator>ResXFileCodeGenerator</Generator>
-        <LastGenOutput>CreateUser.en.Designer.cs</LastGenOutput>
-      </EmbeddedResource>
-      <EmbeddedResource Update="Resources\DTOs\Users\CreateUserRequest.uk.resx">
-        <Generator>ResXFileCodeGenerator</Generator>
-        <LastGenOutput>CreateUser.uk.Designer.cs</LastGenOutput>
-      </EmbeddedResource>
-    </ItemGroup>
-
-    <ItemGroup>
-      <Compile Update="Resources\DTOs\Users\CreateUserRequest.en.Designer.cs">
-        <DesignTime>True</DesignTime>
-        <AutoGen>True</AutoGen>
-        <DependentUpon>CreateUserRequest.en.resx</DependentUpon>
-      </Compile>
-      <Compile Update="Resources\DTOs\Users\CreateUserRequest.uk.Designer.cs">
-        <DesignTime>True</DesignTime>
-        <AutoGen>True</AutoGen>
-        <DependentUpon>CreateUserRequest.uk.resx</DependentUpon>
-      </Compile>
-    </ItemGroup>
-
 </Project>

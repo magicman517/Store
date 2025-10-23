@@ -8,7 +8,13 @@
     </PropertyGroup>
 
     <ItemGroup>
+        <PackageReference Include="FastEndpoints" Version="7.0.1" />
+        <PackageReference Include="FastEndpoints.Security" Version="7.0.1" />
         <PackageReference Include="Microsoft.AspNetCore.OpenApi" Version="9.0.9"/>
+        <PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="9.0.10">
+          <PrivateAssets>all</PrivateAssets>
+          <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+        </PackageReference>
     </ItemGroup>
 
     <ItemGroup>
@@ -19,6 +25,7 @@
 
     <ItemGroup>
       <ProjectReference Include="..\..\..\ServiceDefaults\ServiceDefaults.csproj" />
+      <ProjectReference Include="..\Catalog.Infrastructure\Catalog.Infrastructure.csproj" />
     </ItemGroup>
 
 </Project>
